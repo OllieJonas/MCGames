@@ -1,0 +1,12 @@
+name: Games
+version: ${project.version}
+main: me.ollie.games.Games
+api-version: 1.16
+authors: [ Ollie ]
+description: Bunch of Games Plugin Time
+
+commands:
+  game:
+    description: Main command
+  test:
+    description: Testing commands
