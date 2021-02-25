@@ -6,6 +6,13 @@ public class GameCommand extends AbstractCommand {
 
     @Override
     public void addSubCommands() {
+        // testing
         addSubCommand(new YanSucksCommand());
+        // admin
+        addSubCommand(new CreateLobbyCommand());
+        addSubCommand(new ForceStartCommand());
+
+        // public
+        addSubCommand(new ListCommand());
     }
 }

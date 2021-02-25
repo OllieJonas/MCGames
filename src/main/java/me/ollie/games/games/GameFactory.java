@@ -35,11 +35,7 @@ public class GameFactory {
 
     private static AbstractGame doGetGame(String name) {
         Supplier<? extends AbstractGame> game = games.get(name.toLowerCase());
-
-        if (game == null)
-            throw new IllegalArgumentException("Invalid game!");
-
-        return game.get();
+        return game != null ? game.get() : getRandomGame();
     }
 
 }

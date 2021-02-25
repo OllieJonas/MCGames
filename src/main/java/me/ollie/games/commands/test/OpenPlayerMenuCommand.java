@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class OpenPlayerMenuCommand extends SubCommand {
 
     public OpenPlayerMenuCommand() {
-        super("playermenu", true, EMPTY);
+        super("playermenu", true, NO_ALIASES);
     }
 
     @Override

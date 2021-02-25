@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public abstract class SubCommand {
 
-    protected static final String[] EMPTY = new String[0];
+    protected static final String[] NO_ALIASES = new String[0];
 
     private final String name;
 

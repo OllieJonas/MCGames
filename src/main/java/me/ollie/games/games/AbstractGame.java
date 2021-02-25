@@ -3,6 +3,7 @@ package me.ollie.games.games;
 import lombok.Getter;
 import me.ollie.games.api.events.GameChangeStateEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +41,7 @@ public abstract class AbstractGame {
     @Getter
     private final String name;
 
-    private final Set<String> players;
+    private final Set<Player> players;
 
     private GameState state;
 
