@@ -150,6 +150,8 @@ public class ItemStackBuilder {
         // Getting the stack's meta
         final ItemMeta itemMeta = itemStack.getItemMeta();
 
+        Objects.requireNonNull(itemMeta);
+
         // Meta
         // Set localized name if not null
         if (localizedName != null) {
@@ -216,7 +218,7 @@ public class ItemStackBuilder {
         public ItemStack buildSkull() {
             // Build the stack first, edit to make sure it's a skull
             ItemStack skull = stackBuilder
-                    .asMaterial(Material.LEGACY_SKULL)
+                    .asMaterial(Material.LEGACY_SKULL_ITEM)
                     .withData(3)
                     .build();
 

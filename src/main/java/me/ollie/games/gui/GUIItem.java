@@ -17,5 +17,5 @@ public class GUIItem {
 
     private final Consumer<Player> action;
 
-    private boolean itemClosesMenu = false;
+    private final boolean itemClosesMenu;
 }

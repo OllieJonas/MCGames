@@ -1,6 +1,7 @@
 package me.ollie.games.gui;
 
 import lombok.Getter;
+import me.ollie.games.util.ChestGUIUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -40,9 +41,13 @@ public abstract class GUI {
 
     public void init() {
         items.entrySet().forEach((e -> inventory.setItem(e.getKey(), e.getValue().getItem())));
+
+        if (hasBorder)
+            ChestGUIUtils.calculateFiller(size).forEach(i -> inventory.setItem(i, ChestGUIUtils.BORDER_ITEM));
     }
 
     public void add(int index, GUIItem item) {
+        index = hasBorder ? ChestGUIUtils.shiftPosition(index) : index;
         items.put(index, item);
     }
 

@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public abstract class SubCommand {
 
+    protected static final String[] EMPTY = new String[0];
+
     private final String name;
 
     private final boolean requiresOp;

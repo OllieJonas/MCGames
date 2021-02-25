@@ -11,6 +11,7 @@ public class GUIEvents implements Listener {
 
     @EventHandler
     public void onInteract(InventoryClickEvent event) {
+
         HumanEntity entity = event.getWhoClicked();
         if (entity instanceof Player) {
             Player player = (Player) entity;

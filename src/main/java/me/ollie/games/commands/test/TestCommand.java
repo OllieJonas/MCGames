@@ -8,5 +8,6 @@ public class TestCommand extends AbstractCommand {
     public void addSubCommands() {
         addSubCommand(new YanSucksCommand());
         addSubCommand(new OpenTestMenuCommand());
+        addSubCommand(new OpenPlayerMenuCommand());
     }
 }
