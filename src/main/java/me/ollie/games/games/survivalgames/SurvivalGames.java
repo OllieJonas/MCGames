@@ -4,6 +4,14 @@ import me.ollie.games.games.AbstractGame;
 
 public class SurvivalGames extends AbstractGame {
 
+    enum Phase {
+        COUNTDOWN,
+        GRACE_PERIOD,
+        GAME,
+        DEATHMATCH,
+        END;
+    }
+
     public SurvivalGames() {
         super("Survival Games");
     }
@@ -15,11 +23,6 @@ public class SurvivalGames extends AbstractGame {
 
     @Override
     public void startGame() {
-
-    }
-
-    @Override
-    public void gameLoop() {
 
     }
 

@@ -10,6 +10,5 @@ public class ForceStartCommand extends SubCommand {
 
     @Override
     public void run(Player sender, String[] args) {
-
     }
 }

@@ -1,6 +1,6 @@
 package me.ollie.games.games.survivalgames;
 
-import lombok.Builder;
+import me.ollie.games.games.survivalgames.chest.SGChest;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -12,7 +12,7 @@ public class SGMap {
 
     private World world;
 
-    private Map<Location, Chest> chests;
+    private Map<Location, SGChest> chests;
 
     private Set<Location> spawnLocations;
 

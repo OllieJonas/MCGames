@@ -55,8 +55,6 @@ public abstract class AbstractGame {
 
     public abstract void startGame();
 
-    public abstract void gameLoop();
-
     public abstract void endGame();
 
     public void nextPhase() {

@@ -113,7 +113,7 @@ public class ItemStackBuilder {
         return this;
     }
 
-    public ItemStackBuilder addEnchantment(Enchantment enchantment, int level) {
+    public ItemStackBuilder withEnchantment(Enchantment enchantment, int level) {
         // Make sure we have something to add the enchantment to
         if (enchantments == null) {
             this.enchantments = new HashMap<>();
