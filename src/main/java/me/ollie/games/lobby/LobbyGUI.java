@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class LobbyGUI {
@@ -19,9 +20,14 @@ public class LobbyGUI {
     @Getter
     private GUI gui;
 
-    private final Function<Lobby, ItemStack> lobbyItemStackFunction = l -> new ItemStackBuilder(Material.EMERALD_BLOCK)
-            .withName(l.getGame().getName())
-            .withLore(" ", ChatColor.GRAY + "Player Count: " + ChatColor.AQUA + l.getPlayers().size() + ChatColor.GRAY + " / " + ChatColor.AQUA + l.getMaxPlayers())
+    private final BiFunction<Lobby, Integer, ItemStack> lobbyItemStackFunction = (l, i) -> new ItemStackBuilder(l.getState().getMaterial())
+            .withName(ChatColor.YELLOW + "" + ChatColor.BOLD + l.getGame().getName())
+            .withLore(
+                    " ",
+                    ChatColor.GRAY + "Player Count: " + ChatColor.AQUA + l.getPlayers().size() + ChatColor.GRAY + " / " + ChatColor.AQUA + l.getMaxPlayers(),
+                    " ",
+                    ChatColor.GRAY + "Lobby: " + ChatColor.AQUA + i
+            )
             .build();
 
     public LobbyGUI() {
@@ -29,7 +35,7 @@ public class LobbyGUI {
     }
 
     public void initGui() {
-        this.gui = new GUI("Games", 54, true) {
+        this.gui = new GUI("Games", 54) {
             @Override
             public void addItems() {
                 AtomicInteger counter = new AtomicInteger(0);
@@ -37,7 +43,7 @@ public class LobbyGUI {
                         .getLobbies()
                         .values()
                         .stream()
-                        .map(l -> new GUIItem(lobbyItemStackFunction.apply(l), p -> p.sendMessage("hihihi"), true))
+                        .map(l -> new GUIItem(lobbyItemStackFunction.apply(l, counter.get()), player -> l.getState().actionOnClickFactory().accept(player, l), true))
                         .forEach(i -> add(counter.getAndIncrement(), i));
             }
         };

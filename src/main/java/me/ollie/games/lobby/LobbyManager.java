@@ -12,12 +12,13 @@ import java.util.Set;
 
 public class LobbyManager {
 
+
     @Getter
     private final Map<Integer, Lobby> lobbies;
 
     private int noLobbies;
 
-    private final Map<Player, Lobby> players;
+    private final Map<Player, Integer> players;
 
     @Getter
     private static final LobbyManager instance = new LobbyManager();
@@ -32,7 +33,7 @@ public class LobbyManager {
     }
 
     public void joinLobby(Player player, int id) {
-        players.put(player, lobbies.get(id));
+        players.put(player, id);
         Lobby lobby = lobbies.get(id);
 
         if (lobby == null) {
@@ -43,9 +44,9 @@ public class LobbyManager {
         lobby.addPlayer(player);
     }
 
-    public void leaveLobby(Player player, int id) {
-        players.remove(player);
+    public void leaveLobby(Player player) {
 
+        int id = players.get(player);
         Lobby lobby = lobbies.get(id);
 
         if (lobby == null) {
@@ -53,6 +54,12 @@ public class LobbyManager {
             return;
         }
 
+        players.remove(player);
+
         lobby.removePlayer(player);
+    }
+
+    public boolean isInLobby(Player player) {
+        return players.containsKey(player);
     }
 }

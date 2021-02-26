@@ -5,6 +5,7 @@ import me.ollie.games.gui.GUIItem;
 import me.ollie.games.util.ItemStackBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 public class YanSucksGUI extends GUI {
 

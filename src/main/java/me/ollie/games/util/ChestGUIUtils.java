@@ -12,10 +12,6 @@ import java.util.stream.IntStream;
 @UtilityClass
 public class ChestGUIUtils {
 
-    public final ItemStack BORDER_ITEM = new ItemStackBuilder(Material.BLACK_STAINED_GLASS_PANE)
-            .withName(ChatColor.BLACK + "|")
-            .build();
-
     private void test() {
         System.out.println("Inventory Size: " + IntStream.range(0, 40)// Test Inventory Size based on number of slots
                 .map(ChestGUIUtils::calculateInventorySize)
@@ -36,7 +32,7 @@ public class ChestGUIUtils {
                 .collect(Collectors.joining("\n")));
 
         System.out.println("Inventory Slots: " + IntStream.rangeClosed(0, 33)
-                .map(ChestGUIUtils::shiftPosition)
+                .map(ChestGUIUtils::shiftToBorderPosition)
                 .boxed()
                 .map(String::valueOf)
                 .collect(Collectors.joining(", ")));
@@ -55,7 +51,7 @@ public class ChestGUIUtils {
                         .boxed()
                         .collect(Collectors.toSet()),
                 IntStream.range(0, invSizeToSlotsRequired(invSize))
-                        .map(ChestGUIUtils::shiftPosition)
+                        .map(ChestGUIUtils::shiftToBorderPosition)
                         .boxed()
                         .collect(Collectors.toSet()));
     }
@@ -69,8 +65,8 @@ public class ChestGUIUtils {
      *
      * @return Shifted value
      */
-    public int shiftPosition(int original) {
-        return ((original / 7) * 2) + original + 10;
+    public int shiftToBorderPosition(int original) {
+        return 2 * (original / 7) + original + 10;
     }
 
     /**

@@ -45,7 +45,7 @@ public class PlayerListGUI {
 
     private GUI initGui() {
         List<Player> players = new ArrayList<>(playerSupplier.get());
-        return new GUI(title, ChestGUIUtils.calculateInventorySize(players.size()), true) {
+        return new GUI(title, ChestGUIUtils.calculateInventorySize(players.size())) {
             @Override
             public void addItems() {
                 for (int i = 0; i < players.size(); i++) {
