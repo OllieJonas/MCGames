@@ -1,7 +1,5 @@
 package me.ollie.games.lobby;
 
-import me.ollie.games.gui.GUIManager;
-import me.ollie.games.lobby.vote.MapVoteGUI;
 import me.ollie.games.util.ItemStackBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -13,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class LobbyItems implements Listener {
 
-    private static final ItemStack VOTE_ITEM = new ItemStackBuilder(Material.COMPASS)
+    private static final ItemStack VOTE_ITEM = new ItemStackBuilder(Material.BOOK)
             .withName(ChatColor.GREEN + "Vote for a Map (Right Click)")
             .withLore(ChatColor.GRAY + "Right click me to vote for a map! :)")
             .build();
@@ -28,7 +26,7 @@ public class LobbyItems implements Listener {
         player.getInventory().setItem(8, LEAVE_ITEM);
     }
 
-    public void resetItems(Player player) {
+    public static void resetItems(Player player) {
         player.getInventory().clear(0);
         player.getInventory().clear(8);
     }
@@ -46,10 +44,10 @@ public class LobbyItems implements Listener {
 
         ItemStack item = event.getItem();
 
-        if (item.getItemMeta().getDisplayName().contains("Leave"))
+        if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("Leave"))
             lobbyManager.leaveLobby(player);
 
-        else if (item.getItemMeta().getDisplayName().contains("Vote for a Map"))
-            GUIManager.getInstance().openGuiFor(player, new MapVoteGUI().getGui());
+        else if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("Vote for a Map"))
+            lobbyManager.getLobbyFor(player).openMapVotingGuiFor(player);
     }
 }

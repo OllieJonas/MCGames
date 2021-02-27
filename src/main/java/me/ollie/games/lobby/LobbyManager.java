@@ -9,9 +9,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class LobbyManager {
-
 
     @Getter
     private final Map<Integer, Lobby> lobbies;
@@ -33,11 +33,16 @@ public class LobbyManager {
     }
 
     public void joinLobby(Player player, int id) {
+
+        if (isInLobby(player))
+            leaveLobby(player);
+
+        System.out.println("Join Lobby ID: " + id);
         players.put(player, id);
         Lobby lobby = lobbies.get(id);
 
         if (lobby == null) {
-            player.sendMessage(ChatColor.RED + "Can't find lobby!");
+            player.sendMessage(ChatColor.RED + "Can't find lobby! Attempted Lobby ID: " + id + ". Lobby IDs: " + lobbies.keySet().stream().map(String::valueOf).collect(Collectors.joining(", ")));
             return;
         }
 
@@ -57,6 +62,10 @@ public class LobbyManager {
         players.remove(player);
 
         lobby.removePlayer(player);
+    }
+
+    public Lobby getLobbyFor(Player player) {
+        return lobbies.get(players.get(player));
     }
 
     public boolean isInLobby(Player player) {

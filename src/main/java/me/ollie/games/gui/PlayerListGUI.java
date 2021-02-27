@@ -50,7 +50,7 @@ public class PlayerListGUI {
             public void addItems() {
                 for (int i = 0; i < players.size(); i++) {
                     Player player = players.get(i);
-                    add(i, new GUIItem(playerItemStackFunction.apply(player), p -> action.accept(p, player), true));
+                    add(i, new GUIItem(playerItemStackFunction.apply(player), (p, item) -> action.accept(p, player), true));
                 }
             }
         };

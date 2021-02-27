@@ -3,9 +3,7 @@ package me.ollie.games.gui;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class GUIManager {
 
@@ -14,9 +12,17 @@ public class GUIManager {
 
     private final Map<UUID, GUI> openedGuis = new HashMap<>();
 
+    private final Map<GUI, Set<Player>> observers = new HashMap<>();
+
 
     public void openGuiFor(Player player, GUI gui) {
         openedGuis.put(player.getUniqueId(), gui);
+
+        if (!observers.containsKey(gui))
+            observers.put(gui, new HashSet<>());
+
+        observers.get(gui).add(player);
+
         gui.open(player);
     }
 
@@ -24,11 +30,17 @@ public class GUIManager {
         UUID uuid = player.getUniqueId();
         GUI gui = openedGuis.remove(uuid);
 
+        observers.get(gui).remove(player);
+
         if (gui != null)
             gui.close(player);
     }
 
     public GUI getGuiFor(Player player) {
         return openedGuis.get(player.getUniqueId());
+    }
+
+    public void notifyAllObservers(GUI gui) {
+        observers.get(gui).forEach(player -> gui.redraw());
     }
 }

@@ -1,9 +1,18 @@
 package me.ollie.games.lobby;
 
 import lombok.Getter;
+import me.ollie.games.Games;
 import me.ollie.games.games.AbstractGame;
 import me.ollie.games.games.MapCollectionFactory;
+import me.ollie.games.gui.GUIManager;
 import me.ollie.games.lobby.vote.MapVote;
+import me.ollie.games.lobby.vote.MapVoteGUI;
+import me.ollie.games.util.Countdown;
+import me.ollie.games.util.GameBossBar;
+import me.ollie.games.util.SetUtils;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,28 +25,19 @@ import java.util.function.BiConsumer;
 @Getter
 public class Lobby {
 
-    public enum State {
-        READY(Material.EMERALD_BLOCK),
-        STARTING(Material.GOLD_BLOCK),
-        IN_GAME(Material.REDSTONE_BLOCK);
+    private static final Location GAMES_LOBBY_LOCATION = new Location(Bukkit.getWorld("lobby"), -898.5, 98.5, 1158.5);
 
-        @Getter
-        private final Material material;
+    private static final GameBossBar WAITING_FOR_PLAYERS = new GameBossBar(
+            BossBar.bossBar(Component.text(ChatColor.AQUA + "Waiting for players."), 1F, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_20),
+            BossBar.bossBar(Component.text(ChatColor.AQUA + "Waiting for players.."), 1F, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_20),
+            BossBar.bossBar(Component.text(ChatColor.AQUA + "Waiting for players..."), 1F, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_20));
 
-        State(Material material) {
-            this.material = material;
-        }
-
-        public BiConsumer<Player, Lobby> actionOnClickFactory() {
-            if (this == READY || this == STARTING) {
-                return (p, l) -> l.addPlayer(p);
-            } else {
-                return (p, l) -> p.sendMessage("Game already started! :(");
-            }
-        }
-    }
 
     private AbstractGame game;
+
+    private Countdown countdown;
+
+    private GameBossBar currentBossBar;
 
     @Getter
     private State state;
@@ -55,19 +55,50 @@ public class Lobby {
     public Lobby(AbstractGame game, boolean requireForceStart) {
         this.game = game;
         this.requireForceStart = requireForceStart;
+        this.currentBossBar = WAITING_FOR_PLAYERS.run();
         this.state = State.READY;
         this.mapVote = new MapVote(MapCollectionFactory.getMapsFor(game));
         this.players = new HashSet<>();
+        this.spawnPoint = GAMES_LOBBY_LOCATION;
+        this.countdown = new Countdown("Voting ends in ", this.players, 30);
+        this.countdown.start();
     }
 
     public void addPlayer(Player player) {
         players.add(player);
+        hidePlayers(player);
+
+        player.teleport(spawnPoint);
+        countdown.addPlayer(player);
+        // currentBossBar.showTo(player);
+
+        LobbyItems.addItems(player);
         sendMessageToAll(player.getName() + " has joined!");
     }
 
     public void removePlayer(Player player) {
         players.remove(player);
+        showPlayers(player); // show all players in hub
+
+        LobbyItems.resetItems(player);
+        countdown.removePlayer(player);
+
+        // currentBossBar.hideFrom(player);
+
         sendMessageToAll(player.getName() + " has left!");
+        player.sendMessage(ChatColor.GRAY + "You left the lobby!");
+        player.teleport(Games.SPAWN);
+    }
+
+
+    private void hidePlayers(Player player) {
+        SetUtils.difference(new HashSet<>(Bukkit.getOnlinePlayers()), players).forEach(t -> player.hidePlayer(Games.getInstance(), t));
+        players.forEach(p -> p.showPlayer(Games.getInstance(), player));
+    }
+
+    private void showPlayers(Player player) {
+        SetUtils.difference(new HashSet<>(Bukkit.getOnlinePlayers()), players).forEach(t -> player.showPlayer(Games.getInstance(), t));
+        players.forEach(p -> p.hidePlayer(Games.getInstance(), player));
     }
 
     public void reload() {
@@ -83,5 +114,29 @@ public class Lobby {
         players.forEach(p -> p.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + game.getName() + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message));
     }
 
+    public void openMapVotingGuiFor(Player player) {
+        GUIManager.getInstance().openGuiFor(player, new MapVoteGUI(mapVote).getGui());
+    }
+
+    public enum State {
+        READY(Material.EMERALD_BLOCK),
+        STARTING(Material.GOLD_BLOCK),
+        IN_GAME(Material.REDSTONE_BLOCK);
+
+        @Getter
+        private final Material material;
+
+        State(Material material) {
+            this.material = material;
+        }
+
+        public BiConsumer<Player, Integer> actionOnClickFactory() {
+            if (this == READY || this == STARTING) {
+                return (p, l) -> LobbyManager.getInstance().joinLobby(p, l);
+            } else {
+                return (p, l) -> p.sendMessage("Game already started! :(");
+            }
+        }
+    }
 
 }

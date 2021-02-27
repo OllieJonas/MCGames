@@ -11,9 +11,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LobbyGUI {
 
@@ -39,21 +42,20 @@ public class LobbyGUI {
             @Override
             public void addItems() {
                 AtomicInteger counter = new AtomicInteger(0);
+
                 LobbyManager.getInstance()
                         .getLobbies()
                         .values()
                         .stream()
-                        .map(l -> new GUIItem(lobbyItemStackFunction.apply(l, counter.get()), player -> l.getState().actionOnClickFactory().accept(player, l), true))
+                        .map(l -> new GUIItem(lobbyItemStackFunction.apply(l, counter.get()), (player, item) -> {
+                            // jesus christ this is hot garbage - this needs to be fixed later
+                            String lobbyStr = ChatColor.stripColor(Objects.requireNonNull(item.getLore()).get(3));
+                            int lobbyNo = Integer.parseInt(lobbyStr.split(" ")[1]);
+                            l.getState().actionOnClickFactory().accept(player, lobbyNo);
+                        }, true))
                         .forEach(i -> add(counter.getAndIncrement(), i));
+
             }
         };
-    }
-
-    public void open(Player player) {
-        gui.open(player);
-    }
-    public void update(Collection<Player> observers) {
-        observers.forEach(HumanEntity::closeInventory);
-        observers.forEach(p -> gui.open(p));
     }
 }

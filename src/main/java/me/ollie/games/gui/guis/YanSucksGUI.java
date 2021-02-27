@@ -5,7 +5,6 @@ import me.ollie.games.gui.GUIItem;
 import me.ollie.games.util.ItemStackBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 public class YanSucksGUI extends GUI {
 
@@ -20,7 +19,7 @@ public class YanSucksGUI extends GUI {
                         .withName(ChatColor.RED + "yan sucks")
                         .withLore(ChatColor.GRAY + "yan indeed does suck")
                         .build())
-                .action(player -> player.sendMessage("yan sucks"))
+                .action((player, item) -> player.sendMessage("yan sucks"))
                 .itemClosesMenu(true)
                 .build());
     }

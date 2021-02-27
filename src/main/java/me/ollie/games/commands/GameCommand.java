@@ -14,5 +14,7 @@ public class GameCommand extends AbstractCommand {
 
         // public
         addSubCommand(new ListCommand());
+        addSubCommand(new VoteCommand());
+        addSubCommand(new LeaveCommand());
     }
 }

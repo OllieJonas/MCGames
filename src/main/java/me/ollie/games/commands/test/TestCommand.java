@@ -9,5 +9,6 @@ public class TestCommand extends AbstractCommand {
         addSubCommand(new YanSucksCommand());
         addSubCommand(new OpenTestMenuCommand());
         addSubCommand(new OpenPlayerMenuCommand());
+        addSubCommand(new ScoreboardCommand());
     }
 }

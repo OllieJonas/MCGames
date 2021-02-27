@@ -1,22 +1,29 @@
 package me.ollie.games.games.survivalgames;
 
+import lombok.Getter;
+import me.ollie.games.core.AbstractGameMap;
 import me.ollie.games.games.survivalgames.chest.SGChest;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class SGMap {
+@Getter
+public class SGMap extends AbstractGameMap {
 
-    private World world;
+    private Set<Location> chests;
 
-    private Map<Location, SGChest> chests;
+    private final Set<Location> spawnLocations;
 
-    private Set<Location> spawnLocations;
+    public SGMap(String name, World world, Set<Location> spawnLocations) {
+        super(name, world);
+        this.spawnLocations = spawnLocations;
+    }
 
-    public SGMap() {
-        this.chests = new HashMap<>();
+    private Set<Location> buildChestLocations() {
+        return null;
     }
 }

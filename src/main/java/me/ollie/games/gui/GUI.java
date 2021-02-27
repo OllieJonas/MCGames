@@ -16,9 +16,9 @@ import java.util.Map;
 @Getter
 public abstract class GUI {
 
-        public final ItemStack BORDER_ITEM = new ItemStackBuilder(Material.BLACK_STAINED_GLASS_PANE)
-            .withName(ChatColor.BLACK + "|")
-            .build();
+    public final ItemStack BORDER_ITEM = new ItemStackBuilder(Material.BLACK_STAINED_GLASS_PANE)
+        .withName(ChatColor.BLACK + "|")
+        .build();
 
     private final String name;
 
@@ -30,7 +30,7 @@ public abstract class GUI {
 
     private final boolean hasBorder;
 
-    private final Map<Integer, GUIItem> items;
+    private Map<Integer, GUIItem> items;
 
     public GUI(String name, int size) {
         this(null, name, size, true);
@@ -77,5 +77,15 @@ public abstract class GUI {
 
     public GUIItem getItem(int slot) {
         return items.get(slot);
+    }
+
+    public void redraw() {
+        clear();
+        addItems();
+        init();
+    }
+
+    public void clear() {
+        this.items = new HashMap<>();
     }
 }

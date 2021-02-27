@@ -54,7 +54,7 @@ public abstract class AbstractCommand implements CommandExecutor {
         return false;
     }
 
-    private boolean noArguments(CommandSender sender) {
+    protected boolean noArguments(CommandSender sender) {
         sender.sendMessage(ChatColor.RED + "No arguments specified!");
         return false;
     }

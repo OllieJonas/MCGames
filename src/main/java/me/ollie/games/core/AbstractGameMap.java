@@ -1,13 +1,15 @@
 package me.ollie.games.core;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.bukkit.World;
 
+@Getter
+@AllArgsConstructor
 public abstract class AbstractGameMap {
 
-    @Getter
-    private String name;
+    protected final String name;
 
-    public AbstractGameMap() {
+    protected final World world;
 
-    }
 }

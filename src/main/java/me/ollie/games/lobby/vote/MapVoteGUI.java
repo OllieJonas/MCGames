@@ -5,48 +5,65 @@ import me.ollie.games.core.AbstractGameMap;
 import me.ollie.games.games.AbstractGame;
 import me.ollie.games.gui.GUI;
 import me.ollie.games.gui.GUIItem;
+import me.ollie.games.gui.GUIManager;
 import me.ollie.games.util.ItemStackBuilder;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.stream.IntStream;
 
 public class MapVoteGUI {
 
     @Getter
     private GUI gui;
 
-    private static final BiFunction<AbstractGameMap, Integer, ItemStack> mapToItemFunction = (map, votes) -> new ItemStackBuilder(Material.OAK_SIGN)
+    private static final BiFunction<AbstractGameMap, Integer, ItemStack> mapToItemFunction = (map, votes) -> new ItemStackBuilder(Material.PAPER)
             .withName(ChatColor.DARK_AQUA + map.getName())
             .withLore(ChatColor.GRAY + "Click to vote!", " ", ChatColor.GRAY + "Votes: " + ChatColor.AQUA + votes)
             .build();
+
+    private static final ItemStack VOTE = new ItemStackBuilder(Material.LIME_STAINED_GLASS_PANE).withName(ChatColor.BLACK + "|").build();
+    private static final ItemStack NON_VOTE = new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE).withName(ChatColor.BLACK + "|").build();
 
     public MapVoteGUI(MapVote mapVote) {
         initGui(mapVote);
     }
 
     private void initGui(MapVote mapVote) {
-        this.gui = new GUI("Map Voting", 54) {
+        this.gui = new GUI("Map Voting - Press ESC to Exit!", 54) {
             @Override
             public void addItems() {
                 AtomicInteger counter = new AtomicInteger(0);
                 mapVote.getTalley()
-                        .entrySet()
-                        .stream()
-                        .map(e -> new GUIItem(
-                                mapToItemFunction.apply(e.getKey(), e.getValue()),
-                                p -> mapVote.vote(p, e.getKey()),
-                                true))
-                        .forEachOrdered(i -> add(counter.getAndIncrement(), i));
+                        .forEach((map, talley) -> {
+                            GUIItem item = new GUIItem(
+                                    mapToItemFunction.apply(map, talley),
+                                    (p, i) -> {
+                                        mapVote.vote(p, map);
+                                        GUIManager.getInstance().notifyAllObservers(this);
+                                    },
+                                    false);
+
+                            int count = counter.get();
+                            add(count, item);
+                            IntStream.rangeClosed(1, Math.min(talley, 6)).forEach(i -> add(i + count, GUIItem.empty(VOTE)));
+
+                            if (talley + 1 < 6)
+                                IntStream.rangeClosed(talley + 1, 6).forEach(i -> add(i + count, GUIItem.empty(NON_VOTE)));
+
+
+                            counter.getAndAdd(7);
+                        });
             }
         };
-    }
-
-    public void update() {
-
     }
 }

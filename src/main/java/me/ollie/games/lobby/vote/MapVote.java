@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MapVote {
 
+    private boolean canVote = false;
+
     @Getter
     private final Collection<AbstractGameMap> maps;
 
@@ -27,18 +29,22 @@ public class MapVote {
     }
 
     public void vote(Player player, AbstractGameMap map) {
-        if (hasPlayerAlreadyVoted(player)) {
-            AbstractGameMap mapVotedFor = votes.get(player);
-            if (mapVotedFor == map) {
-                player.sendMessage(ChatColor.GRAY + "You already voted for this map!");
-                return;
-            } else {
-                removeVote(mapVotedFor);
+        if (canVote) {
+            if (hasPlayerAlreadyVoted(player)) {
+                AbstractGameMap mapVotedFor = votes.get(player);
+                if (mapVotedFor == map) {
+                    player.sendMessage(ChatColor.GRAY + "You already voted for this map!");
+                    return;
+                } else {
+                    removeVote(mapVotedFor);
+                }
             }
-        }
 
-        votes.put(player, map);
-        addVote(map);
+            votes.put(player, map);
+            addVote(map);
+        } else {
+            player.sendMessage(ChatColor.GRAY + "You can't vote right now! :(");
+        }
     }
 
     public AbstractGameMap getLeadingMap() {
@@ -48,6 +54,10 @@ public class MapVote {
                 .map(Map.Entry::getKey)
                 .findFirst()
                 .orElseThrow();
+    }
+
+    public void toggleVoting() {
+        this.canVote = !this.canVote;
     }
 
     private boolean hasPlayerAlreadyVoted(Player player) {

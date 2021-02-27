@@ -50,7 +50,6 @@ public class ChestItemRepository {
         items.add(new ChestItem(new ItemStack(Material.ARROW), 0.3F, true));
         items.add(new ChestItem(new ItemStack(Material.DIAMOND), 0.05F));
         items.add(new ChestItem(new ItemStack(Material.PORKCHOP), 0.3F));
-        items.add(new ChestItem(new ItemStack(Material.DIAMOND), 0.1F));
 
         items.add(new ChestItem(new ItemStack(Material.EXPERIENCE_BOTTLE), 0.2F, true));
 
@@ -60,7 +59,7 @@ public class ChestItemRepository {
         items.add(new ChestItem(new ItemStack(Material.BOW), 0.2F));
         items.add(new ChestItem(new ItemStack(Material.LAPIS_LAZULI), 0.3F, true));
 
-        items.add(new ChestItem(new ItemStackBuilder(Material.STONE_AXE).withEnchantment(Enchantment.DAMAGE_ALL, 1).withName("&bThor's Hammer").build(), 0.001F));
-        items.add(new ChestItem(new ItemStackBuilder(Material.STICK).withEnchantment(Enchantment.KNOCKBACK, 5).withName(ChatColor.ITALIC + "haha knockback go brrr").build(), 0.001F));
+        items.add(new ChestItem(new ItemStackBuilder(Material.STONE_AXE).withEnchantment(Enchantment.DAMAGE_ALL, 1).withName("&bThor's Hammer").build(), 0.01F));
+        items.add(new ChestItem(new ItemStackBuilder(Material.STICK).withEnchantment(Enchantment.KNOCKBACK, 5).withName(ChatColor.ITALIC + "haha knockback go brrr").build(), 0.01F));
     }
 }
