@@ -5,12 +5,14 @@ import lombok.Setter;
 import me.ollie.games.api.events.GamePlayerKillEvent;
 import me.ollie.games.core.AbstractGameMap;
 import me.ollie.games.games.AbstractGame;
+import me.ollie.games.games.SpectatorItems;
 import me.ollie.games.util.Countdown;
 import me.ollie.games.util.MessageUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -55,7 +57,6 @@ public class SurvivalGames extends AbstractGame {
 
     @Override
     public void load(AbstractGameMap map) {
-        MessageUtil.broadcast("am here boss");
         if (!map.getClass().isAssignableFrom(SGMap.class))
             throw new IllegalStateException("this is seriously bad wtf are you doing lmfaooooo (map isnt assignable to sgmap)");
 
@@ -106,6 +107,8 @@ public class SurvivalGames extends AbstractGame {
     private void doHandleDeath(PlayerDeathEvent event) {
         int remainingPlayers = alivePlayers.size();
 
+        setSpectator(event.getEntity());
+
         if (remainingPlayers == 2) { // deathmatch
             currentCountdown.interrupt();
             this.currentCountdown = new Countdown("Deathmatch starts in ", players, 60, gameLogic::deathmatch);
@@ -114,6 +117,13 @@ public class SurvivalGames extends AbstractGame {
         if (remainingPlayers == 1) {
             endGame();
         }
+    }
+
+    public void setSpectator(Player player) {
+        player.showTitle(Title.title(Component.text(ChatColor.RED + "You died! :("), Component.text(ChatColor.GRAY + "You can spectate others by right clicking the clock")));
+        player.setGameMode(GameMode.SPECTATOR);
+        spectators.add(player);
+        SpectatorItems.give(player);
     }
 
     public void sendTitleCard(Player p) {

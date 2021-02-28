@@ -69,6 +69,6 @@ public class LobbyManager {
     }
 
     public boolean isInLobby(Player player) {
-        return players.containsKey(player);
+        return players.containsKey(player) && !getLobbyFor(player).getState().isInGame();
     }
 }

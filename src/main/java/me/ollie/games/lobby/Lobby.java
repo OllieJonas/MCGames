@@ -179,6 +179,10 @@ public class Lobby {
         public boolean hasCountdown() {
             return this == VOTING_ENDING || this == STARTING;
         }
+
+        public boolean isInGame() {
+            return this == IN_GAME;
+        }
     }
 
     public String titleMessage(String message) {

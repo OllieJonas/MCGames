@@ -28,9 +28,11 @@ public class GUIManager {
 
     public void closeGuiFor(Player player) {
         UUID uuid = player.getUniqueId();
+
         GUI gui = openedGuis.remove(uuid);
 
-        observers.get(gui).remove(player);
+        if (observers.get(gui) != null)
+            observers.get(gui).remove(player);
 
         if (gui != null)
             gui.close(player);

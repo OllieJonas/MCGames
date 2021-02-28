@@ -15,7 +15,7 @@ public class SGChest {
     private static final Random RANDOM = new Random();
 
     public static Map<Integer, ItemStack> buildItems() {
-        return buildItemSet().stream().collect(Collectors.toUnmodifiableMap(
+        return buildItemSet().stream().collect(Collectors.toMap(
                 item -> RANDOM.nextInt(27),
                 item -> item,
                 (i1, i2) -> i1 // ignore duplicate keys
@@ -27,7 +27,7 @@ public class SGChest {
 
         WeightedRandomSet<ChestItem> possibleItems = ChestItemRepository.getItems();
 
-        int size = RANDOM.nextInt(3) + 2;
+        int size = RANDOM.nextInt(4) + 3;
         for (int i = 0; i < size; i++) {
             items.add(possibleItems.getRandom().getItem());
         }

@@ -54,7 +54,7 @@ public class MapVote {
                 .sorted(Comparator.comparingInt(Map.Entry::getValue))
                 .map(Map.Entry::getKey)
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(IllegalStateException::new);
     }
 
     private boolean hasPlayerAlreadyVoted(Player player) {

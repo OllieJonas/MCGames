@@ -1,5 +1,7 @@
 package me.ollie.games.games;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.experimental.UtilityClass;
 import me.ollie.games.core.AbstractGameMap;
 import me.ollie.games.games.survivalgames.SGMap;
@@ -8,8 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 @UtilityClass
 public class MapCollectionFactory {
@@ -18,7 +18,7 @@ public class MapCollectionFactory {
         if (game.getName().equals("Survival Games")) {
             World turbulence = Bukkit.getWorld("sg_turbulence");
 
-            return List.of(new SGMap("Turbulence", turbulence, Set.of(
+            return Lists.newArrayList(new SGMap("Turbulence", turbulence, Sets.newHashSet(
                     new Location(turbulence, 1078.5, 53.5, -46.5, 170, 0),
                     new Location(turbulence, 1084.5, 53.5, -48.5, 152, 0),
                     new Location(turbulence, 1089.5, 53.5, -51.5, 133, 0),
