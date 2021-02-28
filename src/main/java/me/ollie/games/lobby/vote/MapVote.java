@@ -1,6 +1,7 @@
 package me.ollie.games.lobby.vote;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.ollie.games.core.AbstractGameMap;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -8,14 +9,14 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 public class MapVote {
 
-    private boolean canVote = false;
+    @Setter
+    private boolean canVote = true;
 
-    @Getter
     private final Collection<AbstractGameMap> maps;
 
-    @Getter
     private final Map<AbstractGameMap, Integer> talley;
 
     private final Map<Player, AbstractGameMap> votes;
@@ -54,10 +55,6 @@ public class MapVote {
                 .map(Map.Entry::getKey)
                 .findFirst()
                 .orElseThrow();
-    }
-
-    public void toggleVoting() {
-        this.canVote = !this.canVote;
     }
 
     private boolean hasPlayerAlreadyVoted(Player player) {

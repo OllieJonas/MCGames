@@ -2,6 +2,7 @@ package me.ollie.games.lobby;
 
 import lombok.Getter;
 import me.ollie.games.Games;
+import me.ollie.games.core.AbstractGameMap;
 import me.ollie.games.games.AbstractGame;
 import me.ollie.games.games.MapCollectionFactory;
 import me.ollie.games.gui.GUIManager;
@@ -37,16 +38,18 @@ public class Lobby {
 
     private Countdown countdown;
 
-    private GameBossBar currentBossBar;
+    private final GameBossBar waitingForPlayers;
 
     @Getter
     private State state;
 
-    private MapVote mapVote;
+    private final MapVote mapVote;
 
-    private int maxPlayers = 24;
+    private final int maxPlayers = 24;
 
-    private Location spawnPoint;
+    private int minimumPlayersToStart = 15;
+
+    private final Location spawnPoint;
 
     private final Set<Player> players;
 
@@ -55,13 +58,12 @@ public class Lobby {
     public Lobby(AbstractGame game, boolean requireForceStart) {
         this.game = game;
         this.requireForceStart = requireForceStart;
-        this.currentBossBar = WAITING_FOR_PLAYERS.run();
-        this.state = State.READY;
+        this.waitingForPlayers = WAITING_FOR_PLAYERS.run();
+        this.state = State.WAITING;
         this.mapVote = new MapVote(MapCollectionFactory.getMapsFor(game));
         this.players = new HashSet<>();
+        this.countdown = new Countdown("random lmao just gotta fill this biz weewoo :))", new HashSet<>(), 1);
         this.spawnPoint = GAMES_LOBBY_LOCATION;
-        this.countdown = new Countdown("Voting ends in ", this.players, 30);
-        this.countdown.start();
     }
 
     public void addPlayer(Player player) {
@@ -70,10 +72,35 @@ public class Lobby {
 
         player.teleport(spawnPoint);
         countdown.addPlayer(player);
-        // currentBossBar.showTo(player);
 
         LobbyItems.addItems(player);
         sendMessageToAll(player.getName() + " has joined!");
+
+        if (!requireForceStart && players.size() >= minimumPlayersToStart)
+            startEndingVoting();
+    }
+
+    public void startEndingVoting() {
+        this.state = State.VOTING_ENDING;
+        this.countdown = new Countdown("Voting ends in ", this.players, 30, this::endVoting).start();
+    }
+
+    public void endVoting() {
+        this.mapVote.setCanVote(false);
+        AbstractGameMap selectedMap = mapVote.getLeadingMap();
+        players.forEach(p -> p.sendMessage(ChatColor.GRAY + "Voting has ended! Selected map: " + selectedMap.getName()));
+        game.load(selectedMap);
+        gameStarting();
+    }
+
+    public void gameStarting() {
+        this.state = State.STARTING;
+        this.countdown = new Countdown("Game starting in ", this.players, 30, this::startGame).start();
+    }
+
+    public void startGame() {
+        this.state = State.IN_GAME;
+        game.startGame(players);
     }
 
     public void removePlayer(Player player) {
@@ -119,7 +146,9 @@ public class Lobby {
     }
 
     public enum State {
-        READY(Material.EMERALD_BLOCK),
+
+        WAITING(Material.EMERALD_BLOCK),
+        VOTING_ENDING(Material.EMERALD_BLOCK),
         STARTING(Material.GOLD_BLOCK),
         IN_GAME(Material.REDSTONE_BLOCK);
 
@@ -131,7 +160,7 @@ public class Lobby {
         }
 
         public BiConsumer<Player, Integer> actionOnClickFactory() {
-            if (this == READY || this == STARTING) {
+            if (this == WAITING || this == VOTING_ENDING || this == STARTING) {
                 return (p, l) -> LobbyManager.getInstance().joinLobby(p, l);
             } else {
                 return (p, l) -> p.sendMessage("Game already started! :(");

@@ -3,6 +3,7 @@ package me.ollie.games;
 import lombok.Getter;
 import me.ollie.games.commands.GameCommand;
 import me.ollie.games.commands.test.TestCommand;
+import me.ollie.games.events.RandomBoringEvents;
 import me.ollie.games.events.ChatEvents;
 import me.ollie.games.gui.GUIEvents;
 import me.ollie.games.lobby.LobbyItems;
@@ -41,5 +42,6 @@ public final class Games extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ChatEvents(), this);
         Bukkit.getPluginManager().registerEvents(new GUIEvents(), this);
         Bukkit.getPluginManager().registerEvents(new LobbyItems(), this);
+        Bukkit.getPluginManager().registerEvents(new RandomBoringEvents(), this);
     }
 }

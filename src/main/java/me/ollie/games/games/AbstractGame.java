@@ -1,8 +1,8 @@
 package me.ollie.games.games;
 
 import lombok.Getter;
-import me.ollie.games.api.events.GameChangeStateEvent;
-import org.bukkit.Bukkit;
+import lombok.Setter;
+import me.ollie.games.core.AbstractGameMap;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -10,60 +10,25 @@ import java.util.Set;
 
 public abstract class AbstractGame {
 
-    public enum GameState {
-        INIT("Initialising"),
-        WAITING("Waiting"),
-        LOBBY("In Lobby"),
-        STARTING("Starting!"),
-        LIVE("Live!"),
-        END("Ended!"),
-        RESETTING("Resetting...");
-
-        @Getter
-        private final String description;
-
-        @Getter
-        private static final GameState[] VALUES = values();
-
-        GameState(String description) {
-            this.description = description;
-        }
-
-        public GameState next() {
-            return VALUES[ordinal() + 1];
-        }
-
-        public GameState prev() {
-            return VALUES[ordinal() + 1];
-        }
-    }
-
     @Getter
     private final String name;
 
-    private final Set<Player> players;
+    @Setter
+    protected AbstractGameMap map;
 
-    private GameState state;
+    protected final Set<Player> players;
+
+    protected final Set<Player> spectators;
 
     public AbstractGame(String name) {
         this.name = name;
         this.players = new HashSet<>();
-        this.state = GameState.INIT;
+        this.spectators = new HashSet<>();
     }
 
-    public abstract void load();
+    public abstract void load(AbstractGameMap map);
 
-    public abstract void startGame();
+    public abstract void startGame(Set<Player> players);
 
     public abstract void endGame();
-
-    public void nextPhase() {
-        this.state = state.next();
-        Bukkit.getPluginManager().callEvent(new GameChangeStateEvent(this));
-    }
-
-    public void prevPhase() {
-        this.state = state.prev();
-        Bukkit.getPluginManager().callEvent(new GameChangeStateEvent(this));
-    }
 }

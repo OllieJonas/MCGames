@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 public class GameFactory {
 
     private static final List<String> gameNames = new ArrayList<>();
+
     private static final Map<String, Supplier<? extends AbstractGame>> games = new HashMap<>();
 
     static {
