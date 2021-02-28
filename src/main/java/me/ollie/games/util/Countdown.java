@@ -8,9 +8,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -24,9 +25,15 @@ public class Countdown {
 
     private int taskId;
 
+    private String title;
+
+    private boolean displayTitle = true;
+
     private final GameBossBar bossBar;
 
     private final Collection<Player> audience;
+
+    private final Map<Integer, Runnable> actions;
 
     private final int seconds;
 
@@ -40,24 +47,42 @@ public class Countdown {
         this.message = message;
         this.audience = audience;
         this.seconds = seconds;
+        this.actions = new HashMap<>();
         this.bossBar = buildBossBar(message, seconds);
         this.onFinish = onFinish;
     }
 
     public void addPlayer(Player player) {
         audience.add(player);
-        bossBar.showTo(player);
+        if (bossBar != null)
+            bossBar.showTo(player);
+    }
+
+    public Countdown withAction(int time, Runnable action) {
+        actions.put(time, action);
+        return this;
+    }
+
+    public Countdown setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public Countdown setDisplaySubtitle(boolean displayTitle) {
+        this.displayTitle = displayTitle;
+        return this;
     }
 
     public void removePlayer(Player player) {
         audience.remove(player);
-        bossBar.hideFrom(player);
+        if (bossBar != null)
+            bossBar.hideFrom(player);
     }
 
     public Countdown start() {
-        audience.forEach(bossBar::showTo);
         bossBar.run();
-        taskId = Bukkit.getScheduler().scheduleAsyncRepeatingTask(Games.getInstance(), new Task(), 0L, 20L);
+        audience.forEach(bossBar::showTo);
+        taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Games.getInstance(), new Task(), 0L, 20L);
         return this;
     }
 
@@ -67,16 +92,18 @@ public class Countdown {
 
     public void destroy() {
         Bukkit.getScheduler().cancelTask(taskId);
+        bossBar.destroy();
+        onFinish.run();
     }
 
     private GameBossBar buildBossBar(String message, int seconds) {
         return new GameBossBar(1, TimeUnit.SECONDS,
-                IntStream.rangeClosed(2, seconds)
+                IntStream.rangeClosed(0, seconds - 1)
                         .boxed()
                         .map(i -> BossBar.bossBar(Component.text(formatCountdown(message, seconds - i)), 1.0F - ((float) i / (float) seconds), BossBar.Color.PURPLE, BossBar.Overlay.PROGRESS)).collect(Collectors.toList()));
     }
 
-    private class Task extends BukkitRunnable {
+    private class Task implements Runnable {
 
         private boolean cancelled = false;
 
@@ -84,33 +111,43 @@ public class Countdown {
         public void run() {
 
             if (cancelled) {
-                onFinish.run();
                 destroy();
                 return;
             }
 
             int secondsRemaining = seconds - counter.get();
 
-            if (secondsRemaining == 15) {
-                audience.forEach(p -> p.sendTitle("", formatCountdown(message, secondsRemaining)));
+            if (actions.containsKey(secondsRemaining))
+                actions.get(secondsRemaining).run();
+
+            if (secondsRemaining == seconds || secondsRemaining == 15 || secondsRemaining < 6) {
+                sendNotificationToAll(secondsRemaining);
             }
 
-            if (secondsRemaining < 6) {
-                audience.forEach(p -> {
-                    p.sendMessage(formatCountdown(message, secondsRemaining));
-                    p.playSound(p.getLocation(), Sound.BLOCK_STONE_BUTTON_CLICK_ON, 1, 1);
-                });
-            }
-
-            if (secondsRemaining == 0) {
+            if (secondsRemaining <= 1) {
                 cancelled = true;
             }
             counter.getAndIncrement();
         }
+
+        private void sendNotificationToAll(int timeRemaining) {
+            audience.forEach(p -> {
+                if (displayTitle)
+                    p.sendTitle("", formatCountdown(message, timeRemaining));
+
+                p.sendMessage(addTitle(title, message, timeRemaining));
+            });
+        }
+    }
+
+
+
+    private static String addTitle(String title, String message, int timeRemaining) {
+        return (title != null ? ChatColor.DARK_AQUA + "" + ChatColor.BOLD + title + ChatColor.DARK_GRAY + " | ": "") + formatCountdown(message, timeRemaining);
     }
 
     private static String formatCountdown(String message, int timeRemaining) {
-        return ChatColor.GRAY + message + " " + ChatColor.AQUA + toMinutesAndSeconds(timeRemaining);
+        return ChatColor.GRAY + message + ChatColor.AQUA + toMinutesAndSeconds(timeRemaining);
     }
 
     private static String toMinutesAndSeconds(int timeRemaining) {
@@ -118,10 +155,10 @@ public class Countdown {
     }
 
     private static String getSeconds(int time) {
-        return time + (time == 1 ? "second" : "seconds");
+        return time + " " + (time == 1 ? "second" : "seconds");
     }
 
     private static String getMinutes(int time) {
-        return time + (time == 1 ? "minute" : "minutes");
+        return time + " " + (time == 1 ? "minute" : "minutes");
     }
 }

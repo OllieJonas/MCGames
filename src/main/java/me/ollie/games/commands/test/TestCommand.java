@@ -10,5 +10,6 @@ public class TestCommand extends AbstractCommand {
         addSubCommand(new OpenTestMenuCommand());
         addSubCommand(new OpenPlayerMenuCommand());
         addSubCommand(new ScoreboardCommand());
+        addSubCommand(new ClearInventoryCommand());
     }
 }

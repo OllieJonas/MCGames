@@ -1,6 +1,7 @@
 package me.ollie.games.events;
 
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -19,7 +20,10 @@ public class RandomBoringEvents implements Listener {
 
     @EventHandler
     public void onHunger(FoodLevelChangeEvent event) {
-        event.setCancelled(true);
+        if (event.getEntity() instanceof Player) {
+            ((Player) event.getEntity()).setFoodLevel(20);
+            event.setCancelled(true);
+        }
     }
 
 

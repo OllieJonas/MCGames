@@ -73,34 +73,13 @@ public class Lobby {
         player.teleport(spawnPoint);
         countdown.addPlayer(player);
 
+        waitingForPlayers.showTo(player);
+
         LobbyItems.addItems(player);
-        sendMessageToAll(player.getName() + " has joined!");
+        sendMessageToAll(ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has joined! (" + ChatColor.AQUA + players.size() + ChatColor.GRAY + " / " + ChatColor.AQUA + maxPlayers + ChatColor.GRAY + ")");
 
         if (!requireForceStart && players.size() >= minimumPlayersToStart)
             startEndingVoting();
-    }
-
-    public void startEndingVoting() {
-        this.state = State.VOTING_ENDING;
-        this.countdown = new Countdown("Voting ends in ", this.players, 30, this::endVoting).start();
-    }
-
-    public void endVoting() {
-        this.mapVote.setCanVote(false);
-        AbstractGameMap selectedMap = mapVote.getLeadingMap();
-        players.forEach(p -> p.sendMessage(ChatColor.GRAY + "Voting has ended! Selected map: " + selectedMap.getName()));
-        game.load(selectedMap);
-        gameStarting();
-    }
-
-    public void gameStarting() {
-        this.state = State.STARTING;
-        this.countdown = new Countdown("Game starting in ", this.players, 30, this::startGame).start();
-    }
-
-    public void startGame() {
-        this.state = State.IN_GAME;
-        game.startGame(players);
     }
 
     public void removePlayer(Player player) {
@@ -108,13 +87,39 @@ public class Lobby {
         showPlayers(player); // show all players in hub
 
         LobbyItems.resetItems(player);
-        countdown.removePlayer(player);
 
-        // currentBossBar.hideFrom(player);
+        if (state.hasCountdown())
+            countdown.removePlayer(player);
 
-        sendMessageToAll(player.getName() + " has left!");
+        waitingForPlayers.hideFrom(player);
+
+        sendMessageToAll(ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has left! (" + ChatColor.AQUA + players.size() + ChatColor.GRAY + " / " + ChatColor.AQUA + maxPlayers + ChatColor.GRAY + ")");
         player.sendMessage(ChatColor.GRAY + "You left the lobby!");
         player.teleport(Games.SPAWN);
+    }
+
+    public void startEndingVoting() {
+        this.state = State.VOTING_ENDING;
+        waitingForPlayers.destroy();
+        this.countdown = new Countdown("Voting ends in ", this.players, 30, this::endVoting).start();
+    }
+
+    public void endVoting() {
+        this.mapVote.setCanVote(false);
+        AbstractGameMap selectedMap = mapVote.getLeadingMap();
+        players.forEach(p -> p.sendMessage(titleMessage("Voting has ended! Selected map: " + ChatColor.AQUA + selectedMap.getName())));
+        game.load(selectedMap);
+        gameStarting();
+    }
+
+    public void gameStarting() {
+        this.state = State.STARTING;
+        this.countdown = new Countdown("Teleporting to map in ", this.players, 30, this::startGame).start();
+    }
+
+    public void startGame() {
+        this.state = State.IN_GAME;
+        game.startGame(players);
     }
 
 
@@ -138,17 +143,21 @@ public class Lobby {
     }
 
     public void sendMessageToAll(String message) {
-        players.forEach(p -> p.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + game.getName() + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message));
+        players.forEach(p -> p.sendMessage(titleMessage(message)));
     }
 
     public void openMapVotingGuiFor(Player player) {
         GUIManager.getInstance().openGuiFor(player, new MapVoteGUI(mapVote).getGui());
     }
 
+    public void setSpectator(Player player) {
+
+    }
+
     public enum State {
 
         WAITING(Material.EMERALD_BLOCK),
-        VOTING_ENDING(Material.EMERALD_BLOCK),
+        VOTING_ENDING(Material.GOLD_BLOCK),
         STARTING(Material.GOLD_BLOCK),
         IN_GAME(Material.REDSTONE_BLOCK);
 
@@ -166,6 +175,14 @@ public class Lobby {
                 return (p, l) -> p.sendMessage("Game already started! :(");
             }
         }
+
+        public boolean hasCountdown() {
+            return this == VOTING_ENDING || this == STARTING;
+        }
+    }
+
+    public String titleMessage(String message) {
+        return ChatColor.DARK_AQUA + "" + ChatColor.BOLD + game.getName() + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message;
     }
 
 }

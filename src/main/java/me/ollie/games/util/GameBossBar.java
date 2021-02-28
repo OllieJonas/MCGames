@@ -64,7 +64,8 @@ public class GameBossBar {
     }
 
     public GameBossBar run() {
-        this.taskId = Bukkit.getScheduler().scheduleAsyncRepeatingTask(Games.getInstance(), new Task(), 0L, TimeUnitToTicks.calculate(time, timeUnit));
+        this.currentBar = bossBar.get(0);
+        this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Games.getInstance(), new Task(), 0L, TimeUnitToTicks.calculate(time, timeUnit));
         return this;
     }
 
@@ -86,7 +87,7 @@ public class GameBossBar {
         audience.forEach(p -> p.hideBossBar(currentBar));
     }
 
-    private class Task extends BukkitRunnable {
+    private class Task implements Runnable {
 
         private boolean cancelled = false;
 

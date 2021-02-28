@@ -8,17 +8,17 @@ public class ChestItem {
 
     private final ItemStack item;
 
-    private final float dropChance;
+    private static final Random RANDOM = new Random();
 
     private final boolean shouldGenerateRandomAmount;
 
 
-    public ChestItem(ItemStack item, float dropChance) {
-        this(item, dropChance, false);
+    public ChestItem(ItemStack item) {
+        this(item, false);
     }
-    public ChestItem(ItemStack item, float dropChance, boolean shouldGenerateRandomAmount) {
+
+    public ChestItem(ItemStack item, boolean shouldGenerateRandomAmount) {
         this.item = makeUnbreakable(item);
-        this.dropChance = dropChance;
         this.shouldGenerateRandomAmount = shouldGenerateRandomAmount;
     }
 
@@ -26,20 +26,14 @@ public class ChestItem {
         return shouldGenerateRandomAmount ? randomNumberOfItem(5) : item;
     }
 
-    public float getDropChance() {
-        return dropChance;
-    }
-
     private ItemStack makeUnbreakable(ItemStack item) {
         item.getItemMeta().setUnbreakable(true);
         return item;
     }
 
-
-
+    @SuppressWarnings("SameParameterValue")
     private ItemStack randomNumberOfItem(int bound) {
-        Random random = new Random();
-        int randInt = random.nextInt(bound);
+        int randInt = RANDOM.nextInt(bound);
         item.setAmount(randInt);
         return item;
     }
