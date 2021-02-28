@@ -10,6 +10,7 @@ import me.ollie.games.lobby.vote.MapVote;
 import me.ollie.games.lobby.vote.MapVoteGUI;
 import me.ollie.games.util.Countdown;
 import me.ollie.games.util.GameBossBar;
+import me.ollie.games.util.PlayerUtil;
 import me.ollie.games.util.SetUtils;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
@@ -28,42 +29,30 @@ public class Lobby {
 
     private static final Location GAMES_LOBBY_LOCATION = new Location(Bukkit.getWorld("lobby"), -898.5, 98.5, 1158.5);
 
-    private static final GameBossBar WAITING_FOR_PLAYERS = new GameBossBar(
+    private final GameBossBar waitingForPlayers = new GameBossBar(
             BossBar.bossBar(Component.text(ChatColor.AQUA + "Waiting for players."), 1F, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_20),
             BossBar.bossBar(Component.text(ChatColor.AQUA + "Waiting for players.."), 1F, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_20),
-            BossBar.bossBar(Component.text(ChatColor.AQUA + "Waiting for players..."), 1F, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_20));
-
-
+            BossBar.bossBar(Component.text(ChatColor.AQUA + "Waiting for players..."), 1F, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_20));;
+    private final MapVote mapVote;
+    private final int maxPlayers = 24;
+    private final int minimumPlayersToStart = 15;
+    private final Location spawnPoint;
+    private final Set<Player> players;
+    private final boolean requireForceStart;
     private AbstractGame game;
-
     private Countdown countdown;
-
-    private final GameBossBar waitingForPlayers;
-
     @Getter
     private State state;
-
-    private final MapVote mapVote;
-
-    private final int maxPlayers = 24;
-
-    private int minimumPlayersToStart = 15;
-
-    private final Location spawnPoint;
-
-    private final Set<Player> players;
-
-    private final boolean requireForceStart;
 
     public Lobby(AbstractGame game, boolean requireForceStart) {
         this.game = game;
         this.requireForceStart = requireForceStart;
-        this.waitingForPlayers = WAITING_FOR_PLAYERS.run();
         this.state = State.WAITING;
         this.mapVote = new MapVote(MapCollectionFactory.getMapsFor(game));
         this.players = new HashSet<>();
         this.countdown = new Countdown("random lmao just gotta fill this biz weewoo :))", new HashSet<>(), 1);
         this.spawnPoint = GAMES_LOBBY_LOCATION;
+        waitingForPlayers.run();
     }
 
     public void addPlayer(Player player) {
@@ -86,7 +75,7 @@ public class Lobby {
         players.remove(player);
         showPlayers(player); // show all players in hub
 
-        LobbyItems.resetItems(player);
+        PlayerUtil.reset(player);
 
         if (state.hasCountdown())
             countdown.removePlayer(player);
@@ -101,7 +90,7 @@ public class Lobby {
     public void startEndingVoting() {
         this.state = State.VOTING_ENDING;
         waitingForPlayers.destroy();
-        this.countdown = new Countdown("Voting ends in ", this.players, 30, this::endVoting).start();
+        this.countdown = new Countdown("Voting ends in ", this.players, 15, this::endVoting).setDisplaySubtitle(false).start();
     }
 
     public void endVoting() {
@@ -114,7 +103,7 @@ public class Lobby {
 
     public void gameStarting() {
         this.state = State.STARTING;
-        this.countdown = new Countdown("Teleporting to map in ", this.players, 30, this::startGame).start();
+        this.countdown = new Countdown("Teleporting to map in ", this.players, 15, this::startGame).setDisplaySubtitle(false).start();
     }
 
     public void startGame() {
@@ -151,20 +140,27 @@ public class Lobby {
     }
 
     public void setSpectator(Player player) {
+    }
 
+    public String titleMessage(String message) {
+        return ChatColor.DARK_AQUA + "" + ChatColor.BOLD + game.getName() + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message;
     }
 
     public enum State {
 
-        WAITING(Material.EMERALD_BLOCK),
-        VOTING_ENDING(Material.GOLD_BLOCK),
-        STARTING(Material.GOLD_BLOCK),
-        IN_GAME(Material.REDSTONE_BLOCK);
+        WAITING(ChatColor.GREEN + "Waiting for players...", Material.EMERALD_BLOCK),
+        VOTING_ENDING(ChatColor.YELLOW + "Voting is ending soon...", Material.GOLD_BLOCK),
+        STARTING(ChatColor.YELLOW + "Game is starting soon...", Material.GOLD_BLOCK),
+        IN_GAME(ChatColor.RED + "Game has already started!", Material.REDSTONE_BLOCK);
+
+        @Getter
+        private final String message;
 
         @Getter
         private final Material material;
 
-        State(Material material) {
+        State(String message, Material material) {
+            this.message = message;
             this.material = material;
         }
 
@@ -183,10 +179,6 @@ public class Lobby {
         public boolean isInGame() {
             return this == IN_GAME;
         }
-    }
-
-    public String titleMessage(String message) {
-        return ChatColor.DARK_AQUA + "" + ChatColor.BOLD + game.getName() + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message;
     }
 
 }

@@ -8,6 +8,7 @@ import java.util.*;
  * A set that has additional features to get a random item from the set, based on pre-determined weightings.
  * Note that although remove operation exists, it has O(n) complexity, and therefore it is not advised to remove stuff
  * from this.
+ *
  * @param <E>
  */
 public class WeightedRandomSet<E> extends AbstractSet<E> {
@@ -15,12 +16,9 @@ public class WeightedRandomSet<E> extends AbstractSet<E> {
     private static final Double DEFAULT_WEIGHTING = 1.0D;
 
     private static final Random RANDOM = new Random();
-
-    private double totalWeight;
-
     private final Set<E> set;
-
     private final List<SetItem<E>> weightings;
+    private double totalWeight;
 
     public WeightedRandomSet() {
         this.set = new HashSet<>();

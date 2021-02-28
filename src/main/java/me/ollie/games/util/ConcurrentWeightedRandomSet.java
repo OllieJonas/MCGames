@@ -11,6 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * A set that has additional features to get a random item from the set, based on pre-determined weightings.
  * Note that although remove operation exists, it has O(n) complexity, and therefore it is not advised to remove stuff
  * from this.
+ *
  * @param <E>
  */
 public class ConcurrentWeightedRandomSet<E> extends AbstractSet<E> {

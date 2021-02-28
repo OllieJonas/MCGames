@@ -20,6 +20,7 @@ public class GUIItem {
     private final boolean itemClosesMenu;
 
     public static GUIItem empty(ItemStack item) {
-        return new GUIItem(item, (p, i) -> {}, false);
+        return new GUIItem(item, (p, i) -> {
+        }, false);
     }
 }

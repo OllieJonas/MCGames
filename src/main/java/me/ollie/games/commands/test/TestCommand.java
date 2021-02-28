@@ -11,5 +11,7 @@ public class TestCommand extends AbstractCommand {
         addSubCommand(new OpenPlayerMenuCommand());
         addSubCommand(new ScoreboardCommand());
         addSubCommand(new ClearInventoryCommand());
+        addSubCommand(new FireworkCommand());
+        addSubCommand(new ResetPlayerCommand());
     }
 }

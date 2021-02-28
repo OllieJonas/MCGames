@@ -17,8 +17,8 @@ import java.util.Map;
 public abstract class GUI {
 
     public final ItemStack BORDER_ITEM = new ItemStackBuilder(Material.BLACK_STAINED_GLASS_PANE)
-        .withName(ChatColor.BLACK + "|")
-        .build();
+            .withName(ChatColor.BLACK + "|")
+            .build();
 
     private final String name;
 

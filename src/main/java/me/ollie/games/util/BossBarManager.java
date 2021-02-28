@@ -11,7 +11,7 @@ public class BossBarManager {
     @Getter
     private static final BossBarManager instance = new BossBarManager();
 
-    private Set<GameBossBar> bossBars;
+    private final Set<GameBossBar> bossBars;
 
     public BossBarManager() {
         this.bossBars = new HashSet<>();

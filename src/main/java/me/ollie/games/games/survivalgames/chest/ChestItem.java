@@ -6,10 +6,8 @@ import java.util.Random;
 
 public class ChestItem {
 
-    private final ItemStack item;
-
     private static final Random RANDOM = new Random();
-
+    private final ItemStack item;
     private final boolean shouldGenerateRandomAmount;
 
 

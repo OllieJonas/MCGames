@@ -1,8 +1,12 @@
 package me.ollie.games.lobby;
 
+import me.ollie.games.Games;
+import me.ollie.games.util.FireworkUtil;
 import me.ollie.games.util.ItemStackBuilder;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 public class LobbyItems implements Listener {
 
     private static final ItemStack VOTE_ITEM = new ItemStackBuilder(Material.BOOK)
-            .withName(ChatColor.GREEN + "Vote for a Map (Right Click)")
+            .withName(ChatColor.AQUA + "Vote for a Map (Right Click)")
             .withLore(ChatColor.GRAY + "Right click me to vote for a map! :)")
             .build();
 
@@ -21,13 +25,20 @@ public class LobbyItems implements Listener {
             .withLore(ChatColor.GRAY + "Right click me to leave the game! :(")
             .build();
 
+    private static final ItemStack KITTEN_CANNON_ITEM = new ItemStackBuilder(Material.STICK)
+            .withName(ChatColor.AQUA + "Kitten Cannon (Right Click)")
+            .withLore(ChatColor.GRAY + "Right click to send a kitten to the shadow realm")
+            .build();
+
     public static void addItems(Player player) {
         player.getInventory().setItem(0, VOTE_ITEM);
         player.getInventory().setItem(8, LEAVE_ITEM);
+        player.getInventory().setItem(4, KITTEN_CANNON_ITEM);
     }
 
     public static void resetItems(Player player) {
         player.getInventory().clear(0);
+        player.getInventory().clear(4);
         player.getInventory().clear(8);
     }
 
@@ -49,5 +60,18 @@ public class LobbyItems implements Listener {
 
         else if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("Vote for a Map"))
             lobbyManager.getLobbyFor(player).openMapVotingGuiFor(player);
+
+        else if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("Kitten Cannon"))
+            kittenCannon(player);
+    }
+
+    private void kittenCannon(Player player) {
+        Ocelot ocelot = player.getWorld().spawn(player.getEyeLocation(), Ocelot.class);
+        ocelot.setVelocity(player.getEyeLocation().getDirection().multiply(2));
+        Games.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Games.getInstance(), () -> {
+            Location location = ocelot.getLocation();
+            ocelot.remove();
+            FireworkUtil.spawnRandomFirework(location, true);
+        }, 30L);
     }
 }

@@ -3,7 +3,6 @@ package me.ollie.games.games.survivalgames.chest;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import me.ollie.games.util.ItemStackBuilder;
-import me.ollie.games.util.ConcurrentWeightedRandomSet;
 import me.ollie.games.util.WeightedRandomSet;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

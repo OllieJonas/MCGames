@@ -6,15 +6,17 @@ import me.ollie.games.lobby.Lobby;
 import me.ollie.games.lobby.LobbyManager;
 import me.ollie.games.util.MessageUtil;
 import me.ollie.games.util.MovementUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
-import org.bukkit.block.EnderChest;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -22,7 +24,28 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 
+@SuppressWarnings("DuplicatedCode")
 public class SGEvents implements Listener {
+
+    @EventHandler
+    public void spectatorsCantTakeDamage(EntityDamageEvent event) {
+        Entity entity = event.getEntity();
+
+        if (!(entity instanceof Player)) return;
+        Player player = (Player) entity;
+
+        Lobby lobby = LobbyManager.getInstance().getLobbyFor(player);
+
+        if (lobby == null)
+            return;
+
+        if (!lobby.getGame().getName().contains("Survival Games"))
+            return;
+
+        SurvivalGames survivalGames = (SurvivalGames) lobby.getGame();
+        if (survivalGames.isSpectator(player))
+            event.setCancelled(true);
+    }
 
     @EventHandler
     public void countdownStopMovement(PlayerMoveEvent event) {
@@ -37,7 +60,7 @@ public class SGEvents implements Listener {
 
         SurvivalGames survivalGames = (SurvivalGames) lobby.getGame();
 
-        if (survivalGames.getPhase() == SurvivalGames.Phase.COUNTDOWN) {
+        if ((survivalGames.getPhase() == SurvivalGames.Phase.COUNTDOWN || survivalGames.getPhase() == SurvivalGames.Phase.DEATHMATCH_STARTING) && survivalGames.isAlive(player)) {
             if (MovementUtil.hasPositionShifted(event.getFrom(), event.getTo()))
                 event.setCancelled(true);
         }
@@ -64,6 +87,9 @@ public class SGEvents implements Listener {
         if (!survivalGames.getPhase().isInGame())
             return;
 
+        if (survivalGames.isSpectator(player))
+            event.setCancelled(true);
+
         if (!(event.getInventory().getHolder() instanceof Chest)) // ie. not a chest
             return;
 
@@ -81,17 +107,18 @@ public class SGEvents implements Listener {
     @EventHandler
     public void onKill(PlayerDeathEvent event) {
         Player killer = event.getEntity().getKiller();
-        Player victim = event.getEntity().getKiller();
+        Player victim = event.getEntity();
 
-        Lobby lobby = LobbyManager.getInstance().getLobbyFor(killer);
-
+        Lobby lobby = LobbyManager.getInstance().getLobbyFor(victim);
         if (lobby == null)
             return;
 
-        if (!lobby.getGame().getName().contains("Survival Games"))
+        if (!lobby.getGame().getClass().isAssignableFrom(SurvivalGames.class))
             return;
 
         SurvivalGames survivalGames = (SurvivalGames) lobby.getGame();
+
+        victim.setHealth(20D); // avoids death screen
 
         if (killer != null)
             survivalGames.handlePlayerKill(event, killer, victim);

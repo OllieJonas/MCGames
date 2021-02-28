@@ -23,7 +23,7 @@ public class GUIEvents implements Listener {
 
             if (gui == null)
                 return;
-            
+
             event.setCancelled(true);
 
             int slot = event.getSlot();

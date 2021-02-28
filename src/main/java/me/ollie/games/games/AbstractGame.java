@@ -11,14 +11,12 @@ import java.util.Set;
 public abstract class AbstractGame {
 
     @Getter
-    private final String name;
-
-    @Setter
-    protected AbstractGameMap map;
-
-    protected final Set<Player> players;
-
     protected final Set<Player> spectators;
+    @Getter
+    private final String name;
+    @Getter
+    @Setter
+    protected Set<Player> players;
 
     public AbstractGame(String name) {
         this.name = name;

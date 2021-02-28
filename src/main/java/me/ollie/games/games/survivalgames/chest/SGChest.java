@@ -1,6 +1,5 @@
 package me.ollie.games.games.survivalgames.chest;
 
-import me.ollie.games.util.ConcurrentWeightedRandomSet;
 import me.ollie.games.util.WeightedRandomSet;
 import org.bukkit.inventory.ItemStack;
 

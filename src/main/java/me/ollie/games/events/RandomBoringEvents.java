@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class RandomBoringEvents implements Listener {
 
@@ -24,6 +25,12 @@ public class RandomBoringEvents implements Listener {
             ((Player) event.getEntity()).setFoodLevel(20);
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onWeatherChange(WeatherChangeEvent event) {
+        event.setCancelled(true);
+        event.getWorld().setClearWeatherDuration(100000);
     }
 
 

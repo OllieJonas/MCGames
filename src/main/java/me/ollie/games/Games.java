@@ -1,10 +1,12 @@
 package me.ollie.games;
 
 import lombok.Getter;
+import me.ollie.games.citizens.CitizenEvents;
+import me.ollie.games.citizens.CitizensManager;
 import me.ollie.games.commands.GameCommand;
 import me.ollie.games.commands.test.TestCommand;
-import me.ollie.games.events.RandomBoringEvents;
 import me.ollie.games.events.ChatEvents;
+import me.ollie.games.events.RandomBoringEvents;
 import me.ollie.games.games.SpectatorItems;
 import me.ollie.games.games.survivalgames.events.SGEvents;
 import me.ollie.games.gui.GUIEvents;
@@ -17,15 +19,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Games extends JavaPlugin {
 
+    public static final Location SPAWN = new Location(Bukkit.getWorld("world"), 473.5, 10.5, 98.5, -180F, 0F);
     @Getter
     public static Games instance;
 
-    public static final Location SPAWN = new Location(Bukkit.getWorld("world"), 473.5, 10.5, 98.5, -180F, 0F);
-
     @Override
     public void onEnable() {
+        new CitizensManager();
         registerCommands();
         registerListeners();
+
+        clearWeather();
 
         instance = this;
     }
@@ -33,6 +37,7 @@ public final class Games extends JavaPlugin {
     @Override
     public void onDisable() {
         BossBarManager.getInstance().destroy();
+        CitizensManager.getInstance().destroy();
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -49,5 +54,10 @@ public final class Games extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new LobbyEvents(), this);
         Bukkit.getPluginManager().registerEvents(new SGEvents(), this);
         Bukkit.getPluginManager().registerEvents(new SpectatorItems(), this);
+        Bukkit.getPluginManager().registerEvents(new CitizenEvents(), this);
+    }
+
+    private void clearWeather() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> Bukkit.getWorlds().forEach(w -> w.setTime(6000L)), 0L, 100L);
     }
 }

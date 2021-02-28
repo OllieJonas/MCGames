@@ -1,12 +1,11 @@
 package me.ollie.games.util;
 
-import lombok.Setter;
 import me.ollie.games.Games;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -22,25 +21,18 @@ public class Countdown {
     private final String message;
 
     private final AtomicInteger counter = new AtomicInteger(0);
-
+    private final GameBossBar bossBar;
+    private final Collection<Player> audience;
+    private final Map<Integer, Runnable> actions;
+    private final int seconds;
+    private final Runnable onFinish;
     private int taskId;
-
     private String title;
-
     private boolean displayTitle = true;
 
-    private final GameBossBar bossBar;
-
-    private final Collection<Player> audience;
-
-    private final Map<Integer, Runnable> actions;
-
-    private final int seconds;
-
-    private final Runnable onFinish;
-
     public Countdown(String message, Collection<Player> audience, int seconds) {
-        this(message, audience, seconds, () -> {});
+        this(message, audience, seconds, () -> {
+        });
     }
 
     public Countdown(String message, Collection<Player> audience, int seconds, Runnable onFinish) {
@@ -50,6 +42,26 @@ public class Countdown {
         this.actions = new HashMap<>();
         this.bossBar = buildBossBar(message, seconds);
         this.onFinish = onFinish;
+    }
+
+    private static String addTitle(String title, String message, int timeRemaining) {
+        return (title != null ? ChatColor.DARK_AQUA + "" + ChatColor.BOLD + title + ChatColor.DARK_GRAY + " | " : "") + formatCountdown(message, timeRemaining);
+    }
+
+    private static String formatCountdown(String message, int timeRemaining) {
+        return ChatColor.GRAY + message + ChatColor.AQUA + toMinutesAndSeconds(timeRemaining);
+    }
+
+    private static String toMinutesAndSeconds(int timeRemaining) {
+        return timeRemaining < 60 ? getSeconds(timeRemaining) : getMinutes(timeRemaining / 60) + " " + getSeconds(timeRemaining % 60);
+    }
+
+    private static String getSeconds(int time) {
+        return time + " " + (time == 1 ? "second" : "seconds");
+    }
+
+    private static String getMinutes(int time) {
+        return time + " " + (time == 1 ? "minute" : "minutes");
     }
 
     public void addPlayer(Player player) {
@@ -93,7 +105,6 @@ public class Countdown {
     public void destroy() {
         Bukkit.getScheduler().cancelTask(taskId);
         bossBar.destroy();
-        onFinish.run();
     }
 
     private GameBossBar buildBossBar(String message, int seconds) {
@@ -112,6 +123,7 @@ public class Countdown {
 
             if (cancelled) {
                 destroy();
+                onFinish.run();
                 return;
             }
 
@@ -120,14 +132,29 @@ public class Countdown {
             if (actions.containsKey(secondsRemaining))
                 actions.get(secondsRemaining).run();
 
-            if (secondsRemaining == seconds || secondsRemaining == 15 || secondsRemaining < 6) {
+            if (secondsRemaining == seconds || secondsRemaining == 15) {
                 sendNotificationToAll(secondsRemaining);
             }
 
+
             if (secondsRemaining <= 1) {
+                displayFinalCountdown(secondsRemaining, ChatColor.RED);
                 cancelled = true;
             }
+            else if (secondsRemaining < 4)
+                displayFinalCountdown(secondsRemaining, ChatColor.YELLOW);
+            else if (secondsRemaining < 6)
+                displayFinalCountdown(secondsRemaining, ChatColor.GREEN);
+
             counter.getAndIncrement();
+        }
+
+        private void displayFinalCountdown(int secondsRemaining, ChatColor red) {
+            audience.forEach(p -> {
+                p.sendMessage(addTitle(title, message, secondsRemaining));
+                if (displayTitle)
+                    p.showTitle(Title.title(Component.text(red + "" + secondsRemaining), Component.text("")));
+            });
         }
 
         private void sendNotificationToAll(int timeRemaining) {
@@ -138,27 +165,5 @@ public class Countdown {
                 p.sendMessage(addTitle(title, message, timeRemaining));
             });
         }
-    }
-
-
-
-    private static String addTitle(String title, String message, int timeRemaining) {
-        return (title != null ? ChatColor.DARK_AQUA + "" + ChatColor.BOLD + title + ChatColor.DARK_GRAY + " | ": "") + formatCountdown(message, timeRemaining);
-    }
-
-    private static String formatCountdown(String message, int timeRemaining) {
-        return ChatColor.GRAY + message + ChatColor.AQUA + toMinutesAndSeconds(timeRemaining);
-    }
-
-    private static String toMinutesAndSeconds(int timeRemaining) {
-        return timeRemaining < 60 ? getSeconds(timeRemaining) : getMinutes(timeRemaining / 60) + " " + getSeconds(timeRemaining % 60);
-    }
-
-    private static String getSeconds(int time) {
-        return time + " " + (time == 1 ? "second" : "seconds");
-    }
-
-    private static String getMinutes(int time) {
-        return time + " " + (time == 1 ? "minute" : "minutes");
     }
 }

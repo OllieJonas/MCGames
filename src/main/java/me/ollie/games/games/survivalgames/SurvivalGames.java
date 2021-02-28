@@ -6,8 +6,8 @@ import me.ollie.games.api.events.GamePlayerKillEvent;
 import me.ollie.games.core.AbstractGameMap;
 import me.ollie.games.games.AbstractGame;
 import me.ollie.games.games.SpectatorItems;
+import me.ollie.games.lobby.LobbyManager;
 import me.ollie.games.util.Countdown;
-import me.ollie.games.util.MessageUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -29,8 +29,6 @@ public class SurvivalGames extends AbstractGame {
 
     private Set<Location> lootedChests;
 
-    private Set<Player> players;
-
     private Set<Player> alivePlayers;
 
     private Set<Player> disconnectedPlayers;
@@ -47,7 +45,6 @@ public class SurvivalGames extends AbstractGame {
 
     public SurvivalGames() {
         super("Survival Games");
-        this.players = new HashSet<>();
         this.alivePlayers = new HashSet<>();
         this.lootedChests = new HashSet<>();
         this.playerKills = new HashMap<>();
@@ -70,26 +67,13 @@ public class SurvivalGames extends AbstractGame {
 
     @Override
     public void endGame() {
-        gameLogic.endGame();
+        currentCountdown.destroy();
+        Player winner = gameLogic.endGame();
+        LobbyManager.getInstance().removeLobby(LobbyManager.getInstance().getLobbyIdFor(winner));
     }
 
     public void addLootedChest(Location location) {
         lootedChests.add(location);
-    }
-
-    public void handlePlayerKill(PlayerDeathEvent event, Player killer, Player victim) {
-        Bukkit.getPluginManager().callEvent(new GamePlayerKillEvent<>(killer, victim, this));
-        playerKills.put(killer.getUniqueId(), playerKills.get(killer.getUniqueId()) + 1);
-
-        int remainingPlayers = alivePlayers.size();
-        broadcast(ChatColor.AQUA + victim.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.AQUA + killer.getName() + "! " + ChatColor.GRAY + "There are " + ChatColor.AQUA + remainingPlayers + ChatColor.GRAY + " remaining!");
-
-        doHandleDeath(event);
-    }
-
-    public void winner(Player player) {
-        player.sendMessage("you dun did it boi");
-        endGame();
     }
 
     public boolean isChestAlreadyLooted(Location location) {
@@ -100,18 +84,38 @@ public class SurvivalGames extends AbstractGame {
         players.forEach(p -> p.sendMessage(ChatColor.DARK_AQUA + "Survival Games " + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + message));
     }
 
+    public void handlePlayerKill(PlayerDeathEvent event, Player killer, Player victim) {
+        alivePlayers.remove(event.getEntity());
+
+        Bukkit.getPluginManager().callEvent(new GamePlayerKillEvent<>(killer, victim, this));
+        int newKills = playerKills.get(killer.getUniqueId()) + 1;
+        killer.sendMessage(ChatColor.GRAY + "Kills: " + newKills);
+        playerKills.put(killer.getUniqueId(), newKills);
+
+        int remainingPlayers = alivePlayers.size();
+        broadcast(ChatColor.AQUA + victim.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.AQUA + killer.getName() + "! " + ChatColor.GRAY + "There are " + ChatColor.AQUA + remainingPlayers + ChatColor.GRAY + " remaining!");
+
+        doHandleDeath(event);
+    }
+
     public void handlePlayerDeath(PlayerDeathEvent event) {
+        alivePlayers.remove(event.getEntity());
+
         String message = event.getDeathMessage();
+        broadcast(ChatColor.AQUA + message + "! " + ChatColor.GRAY + "There are " + ChatColor.AQUA + alivePlayers.size() + ChatColor.GRAY + " players remaining!");
+
+        doHandleDeath(event);
     }
 
     private void doHandleDeath(PlayerDeathEvent event) {
+        event.setDeathMessage("");
+
         int remainingPlayers = alivePlayers.size();
 
         setSpectator(event.getEntity());
 
         if (remainingPlayers == 2) { // deathmatch
-            currentCountdown.interrupt();
-            this.currentCountdown = new Countdown("Deathmatch starts in ", players, 60, gameLogic::deathmatch);
+            gameLogic.startDeathmatchCounter();
         }
 
         if (remainingPlayers == 1) {
@@ -121,7 +125,10 @@ public class SurvivalGames extends AbstractGame {
 
     public void setSpectator(Player player) {
         player.showTitle(Title.title(Component.text(ChatColor.RED + "You died! :("), Component.text(ChatColor.GRAY + "You can spectate others by right clicking the clock")));
-        player.setGameMode(GameMode.SPECTATOR);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        player.setInvisible(true);
+        player.setGameMode(GameMode.ADVENTURE);
         spectators.add(player);
         SpectatorItems.give(player);
     }
@@ -130,12 +137,21 @@ public class SurvivalGames extends AbstractGame {
         p.showTitle(Title.title(Component.text(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Survival Games"), Component.text(ChatColor.AQUA + "by ya boy")));
     }
 
+    public boolean isAlive(Player player) {
+        return alivePlayers.contains(player);
+    }
+
+    public boolean isSpectator(Player player) {
+        return spectators.contains(player);
+    }
+
 
     public enum Phase {
         PRE_INIT,
         COUNTDOWN,
         GRACE_PERIOD,
         GAME,
+        DEATHMATCH_STARTING,
         DEATHMATCH,
         END;
 

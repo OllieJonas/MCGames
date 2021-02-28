@@ -6,7 +6,6 @@ import me.ollie.games.Games;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,20 +19,14 @@ public class GameBossBar {
     private final AtomicInteger currentStep;
 
     private final long time;
-
-    private int taskId;
-
     private final TimeUnit timeUnit;
-
-    @Getter
-    private BossBar currentBar;
-
     @Getter
     private final List<BossBar> bossBar;
-
     private final Set<Player> audience;
-
     private final boolean repeating;
+    private int taskId;
+    @Getter
+    private BossBar currentBar;
 
     public GameBossBar(BossBar... bars) {
         this(Sets.newConcurrentHashSet(), 1, TimeUnit.SECONDS, true, bars);
@@ -42,6 +35,7 @@ public class GameBossBar {
     public GameBossBar(boolean repeating, BossBar... bars) {
         this(Sets.newConcurrentHashSet(), 1, TimeUnit.SECONDS, repeating, bars);
     }
+
     public GameBossBar(long time, TimeUnit timeUnit, BossBar... bars) {
         this(Sets.newConcurrentHashSet(), time, timeUnit, false, bars);
     }

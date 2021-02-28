@@ -6,20 +6,20 @@ import me.ollie.games.core.AbstractGameMap;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 public class MapVote {
 
+    private final Collection<AbstractGameMap> maps;
+    private final Map<AbstractGameMap, Integer> talley;
+    private final Map<Player, AbstractGameMap> votes;
     @Setter
     private boolean canVote = true;
-
-    private final Collection<AbstractGameMap> maps;
-
-    private final Map<AbstractGameMap, Integer> talley;
-
-    private final Map<Player, AbstractGameMap> votes;
 
     public MapVote(Collection<AbstractGameMap> maps) {
         this.maps = maps;

@@ -4,13 +4,14 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 public class GameScoreboard {
 
-    private Scoreboard scoreboard;
+    private final Scoreboard scoreboard;
 
-    private Objective objective;
+    private final Objective objective;
 
     public GameScoreboard(String title) {
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();

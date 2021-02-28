@@ -2,37 +2,28 @@ package me.ollie.games.lobby.vote;
 
 import lombok.Getter;
 import me.ollie.games.core.AbstractGameMap;
-import me.ollie.games.games.AbstractGame;
 import me.ollie.games.gui.GUI;
 import me.ollie.games.gui.GUIItem;
 import me.ollie.games.gui.GUIManager;
 import me.ollie.games.util.ItemStackBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.logging.Level;
 import java.util.stream.IntStream;
 
 public class MapVoteGUI {
-
-    @Getter
-    private GUI gui;
 
     private static final BiFunction<AbstractGameMap, Integer, ItemStack> mapToItemFunction = (map, votes) -> new ItemStackBuilder(Material.PAPER)
             .withName(ChatColor.DARK_AQUA + map.getName())
             .withLore(ChatColor.GRAY + "Click to vote!", " ", ChatColor.GRAY + "Votes: " + ChatColor.AQUA + votes)
             .build();
-
     private static final ItemStack VOTE = new ItemStackBuilder(Material.LIME_STAINED_GLASS_PANE).withName(ChatColor.BLACK + "|").build();
     private static final ItemStack NON_VOTE = new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE).withName(ChatColor.BLACK + "|").build();
+    @Getter
+    private GUI gui;
 
     public MapVoteGUI(MapVote mapVote) {
         initGui(mapVote);

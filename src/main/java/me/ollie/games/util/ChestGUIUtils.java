@@ -1,9 +1,6 @@
 package me.ollie.games.util;
 
 import lombok.experimental.UtilityClass;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,7 +39,6 @@ public class ChestGUIUtils {
      * Calculates the locations of filler based on the maximum amount of slots calculate by invSizeToSlotsRequired.
      *
      * @param invSize Size of the integers
-     *
      * @return Location of filler.
      */
     public Set<Integer> calculateFiller(int invSize) {
@@ -58,11 +54,10 @@ public class ChestGUIUtils {
 
     /**
      * Shifts a position to allow for edges on a Bukkit menu.
-     *
+     * <p>
      * Examples: 0 -> 10, 5 -> 15, 8 -> 19, 9 -> 20
      *
      * @param original Original value
-     *
      * @return Shifted value
      */
     public int shiftToBorderPosition(int original) {
@@ -72,11 +67,10 @@ public class ChestGUIUtils {
     /**
      * Calculates the inventory size to use for Bukkit.createInventory() based on the maximum slots
      * required. Note this is capped at the maximum size of 54.
-     *
+     * <p>
      * Examples: 4 -> 27, 8 -> 36, 17 -> 45
      *
      * @param slotsRequired The number of slots required
-     *
      * @return The appropriate size of inventory
      */
     public int calculateInventorySize(int slotsRequired) {
@@ -85,11 +79,10 @@ public class ChestGUIUtils {
 
     /**
      * Calculates the maximum number of slots required based on the inventory size.
-     *
+     * <p>
      * Examples: 27 -> 7, 36 -> 14, 45 -> 21
      *
      * @param invSize The size of the inventory
-     *
      * @return The maximum amount of slots required
      */
     public int invSizeToSlotsRequired(int invSize) {

@@ -5,6 +5,7 @@ import me.ollie.games.gui.GUIManager;
 import me.ollie.games.gui.PlayerListGUI;
 import me.ollie.games.lobby.LobbyManager;
 import me.ollie.games.util.ItemStackBuilder;
+import me.ollie.games.util.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,7 +31,7 @@ public class SpectatorItems implements Listener {
         LobbyManager lobbyManager = LobbyManager.getInstance();
         Player player = event.getPlayer();
 
-        if (!lobbyManager.isInLobby(player))
+        if (!lobbyManager.isInGame(player))
             return;
 
         ItemStack item = event.getItem();

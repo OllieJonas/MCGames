@@ -10,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
 @AllArgsConstructor
 public class GamePlayerKillEvent<T extends AbstractGame> extends Event {
 
-    private Player killer;
+    private final Player killer;
 
-    private Player victim;
+    private final Player victim;
 
-    private T game;
+    private final T game;
 
     @Override
     public @NotNull HandlerList getHandlers() {

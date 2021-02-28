@@ -8,6 +8,8 @@ public class GameCommand extends AbstractCommand {
     public void addSubCommands() {
         // testing
         addSubCommand(new YanSucksCommand());
+        addSubCommand(new GameEndCommand());
+
         // admin
         addSubCommand(new CreateLobbyCommand());
         addSubCommand(new ForceStartCommand());

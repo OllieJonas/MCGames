@@ -1,5 +1,6 @@
 package me.ollie.games.lobby;
 
+import me.ollie.games.util.MessageUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -9,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.util.Vector;
 
 public class LobbyEvents implements Listener {
 
@@ -37,14 +39,16 @@ public class LobbyEvents implements Listener {
     public void doubleJumpToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
         if (LobbyManager.getInstance().isInLobby(player)) {
+            MessageUtil.broadcast("I AM HERE BOSS WOOOP WOOP WOOP WOOP WOOP");
             if (player.getGameMode() != GameMode.CREATIVE) {
                 event.setCancelled(true);
                 player.setAllowFlight(false);
                 player.setFlying(false);
-                player.setVelocity(player.getLocation().getDirection().multiply(1.5));
+                player.setVelocity(player.getLocation().getDirection().multiply(1.5).add(new Vector(0, 1, 0)));
             }
         }
     }
+
     @EventHandler
     public void doubleJumpMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();

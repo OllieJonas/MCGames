@@ -40,7 +40,8 @@ public class ItemStackBuilder {
     private Set<ItemFlag> itemFlags = null;
 
     // Construction of a new builder
-    public ItemStackBuilder() {}
+    public ItemStackBuilder() {
+    }
 
     public ItemStackBuilder(Material material) {
         this.material = material;
