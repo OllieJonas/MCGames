@@ -39,7 +39,6 @@ public class LobbyEvents implements Listener {
     public void doubleJumpToggleFlight(PlayerToggleFlightEvent event) {
         Player player = event.getPlayer();
         if (LobbyManager.getInstance().isInLobby(player)) {
-            MessageUtil.broadcast("I AM HERE BOSS WOOOP WOOP WOOP WOOP WOOP");
             if (player.getGameMode() != GameMode.CREATIVE) {
                 event.setCancelled(true);
                 player.setAllowFlight(false);

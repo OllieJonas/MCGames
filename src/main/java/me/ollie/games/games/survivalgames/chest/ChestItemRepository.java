@@ -45,19 +45,25 @@ public class ChestItemRepository {
         items.add(new ChestItem(new ItemStack(Material.IRON_LEGGINGS)), 0.1F);
         items.add(new ChestItem(new ItemStack(Material.IRON_BOOTS)), 0.1F);
 
+        // Useless garbage
+        items.add(new ChestItem(new ItemStack(Material.PORKCHOP)), 0.4F);
+        items.add(new ChestItem(new ItemStack(Material.APPLE)), 0.4F);
+        items.add(new ChestItem(new ItemStack(Material.BEEF)), 0.4F);
+
         // Materials
         items.add(new ChestItem(new ItemStack(Material.STICK)), 0.3F);
         items.add(new ChestItem(new ItemStack(Material.ARROW), true), 0.3F);
         items.add(new ChestItem(new ItemStack(Material.DIAMOND)), 0.05F);
-        items.add(new ChestItem(new ItemStack(Material.PORKCHOP)), 0.3F);
 
         items.add(new ChestItem(new ItemStack(Material.EXPERIENCE_BOTTLE), true), 0.2F);
 
         // Random stuff that's useful in battle
+        items.add(new ChestItem(new ItemStack(Material.SNOWBALL), true), 0.2F);
         items.add(new ChestItem(new ItemStack(Material.FISHING_ROD)), 0.3F);
         items.add(new ChestItem(new ItemStack(Material.SHIELD)), 0.1F);
         items.add(new ChestItem(new ItemStack(Material.BOW)), 0.2F);
         items.add(new ChestItem(new ItemStack(Material.LAPIS_LAZULI), true), 0.3F);
+        items.add(new ChestItem(new ItemStack(Material.ENDER_PEARL), true), 0.1F);
 
         items.add(new ChestItem(new ItemStackBuilder(Material.STONE_AXE).withEnchantment(Enchantment.DAMAGE_ALL, 1).withName("&bThor's Hammer").build()), 0.01F);
         items.add(new ChestItem(new ItemStackBuilder(Material.STICK).withEnchantment(Enchantment.KNOCKBACK, 5).withName(ChatColor.ITALIC + "haha knockback go brrr").build()), 0.01F);

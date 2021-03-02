@@ -2,6 +2,8 @@ package me.ollie.games.util;
 
 import lombok.experimental.UtilityClass;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -90,6 +92,8 @@ public class ChestGUIUtils {
     }
 
     public static void main(String[] args) {
+        List<String> strings = Arrays.asList("hi", "huge", "penis", "time", "wow", "funfunfun");
+        System.out.println(strings.subList(0, 3).stream().collect(Collectors.joining(", ")));
         test();
     }
 }

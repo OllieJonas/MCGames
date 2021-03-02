@@ -20,8 +20,11 @@ public class MapVoteGUI {
             .withName(ChatColor.DARK_AQUA + map.getName())
             .withLore(ChatColor.GRAY + "Click to vote!", " ", ChatColor.GRAY + "Votes: " + ChatColor.AQUA + votes)
             .build();
+
     private static final ItemStack VOTE = new ItemStackBuilder(Material.LIME_STAINED_GLASS_PANE).withName(ChatColor.BLACK + "|").build();
+
     private static final ItemStack NON_VOTE = new ItemStackBuilder(Material.RED_STAINED_GLASS_PANE).withName(ChatColor.BLACK + "|").build();
+
     @Getter
     private GUI gui;
 

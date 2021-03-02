@@ -8,6 +8,7 @@ import me.ollie.games.games.AbstractGame;
 import me.ollie.games.games.SpectatorItems;
 import me.ollie.games.lobby.LobbyManager;
 import me.ollie.games.util.Countdown;
+import me.ollie.games.util.MessageUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -16,6 +17,8 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 
@@ -89,7 +92,9 @@ public class SurvivalGames extends AbstractGame {
 
         Bukkit.getPluginManager().callEvent(new GamePlayerKillEvent<>(killer, victim, this));
         int newKills = playerKills.get(killer.getUniqueId()) + 1;
-        killer.sendMessage(ChatColor.GRAY + "Kills: " + newKills);
+        killer.sendMessage(ChatColor.GRAY + "Kill! Total Kills: " + ChatColor.AQUA + newKills);
+        killer.sendMessage(ChatColor.GRAY + "Applied " + ChatColor.AQUA + "Strength I" + ChatColor.GRAY + " for " + ChatColor.AQUA + "5 seconds!");
+        killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5 * 20, 0));
         playerKills.put(killer.getUniqueId(), newKills);
 
         int remainingPlayers = alivePlayers.size();
@@ -99,9 +104,11 @@ public class SurvivalGames extends AbstractGame {
     }
 
     public void handlePlayerDeath(PlayerDeathEvent event) {
+        MessageUtil.broadcast("handlePlayerDeath");
         alivePlayers.remove(event.getEntity());
 
         String message = event.getDeathMessage();
+        MessageUtil.broadcast(message);
         broadcast(ChatColor.AQUA + message + "! " + ChatColor.GRAY + "There are " + ChatColor.AQUA + alivePlayers.size() + ChatColor.GRAY + " players remaining!");
 
         doHandleDeath(event);
@@ -124,11 +131,11 @@ public class SurvivalGames extends AbstractGame {
     }
 
     public void setSpectator(Player player) {
+        MessageUtil.broadcast("setSpecator");
         player.showTitle(Title.title(Component.text(ChatColor.RED + "You died! :("), Component.text(ChatColor.GRAY + "You can spectate others by right clicking the clock")));
         player.setAllowFlight(true);
-        player.setFlying(true);
+        player.setGameMode(GameMode.CREATIVE);
         player.setInvisible(true);
-        player.setGameMode(GameMode.ADVENTURE);
         spectators.add(player);
         SpectatorItems.give(player);
     }

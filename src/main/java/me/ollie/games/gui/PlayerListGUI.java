@@ -3,6 +3,7 @@ package me.ollie.games.gui;
 import lombok.Getter;
 import me.ollie.games.util.ChestGUIUtils;
 import me.ollie.games.util.ItemStackBuilder;
+import me.ollie.games.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

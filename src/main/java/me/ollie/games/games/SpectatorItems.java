@@ -41,6 +41,6 @@ public class SpectatorItems implements Listener {
     }
 
     private PlayerListGUI spectateGUI(SurvivalGames game) {
-        return new PlayerListGUI("Spectate Menu - Press ESC to Exit", game::getAlivePlayers, p -> new String[]{ChatColor.GRAY + "Click to spectate " + ChatColor.AQUA + p.getName()}, (p, t) -> p.teleport(t.getLocation()));
+        return new PlayerListGUI("Spectate - Press ESC to Exit", game::getAlivePlayers, p -> new String[]{ChatColor.GRAY + "Click to spectate " + ChatColor.AQUA + p.getName()}, (p, t) -> p.teleport(t.getLocation()));
     }
 }

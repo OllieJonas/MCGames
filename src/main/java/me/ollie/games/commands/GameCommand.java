@@ -1,5 +1,6 @@
 package me.ollie.games.commands;
 
+import me.ollie.games.commands.test.ResetPlayerCommand;
 import me.ollie.games.commands.test.YanSucksCommand;
 
 public class GameCommand extends AbstractCommand {
@@ -13,6 +14,7 @@ public class GameCommand extends AbstractCommand {
         // admin
         addSubCommand(new CreateLobbyCommand());
         addSubCommand(new ForceStartCommand());
+        addSubCommand(new ResetPlayerCommand());
 
         // public
         addSubCommand(new ListCommand());

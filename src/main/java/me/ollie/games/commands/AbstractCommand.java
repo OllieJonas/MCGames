@@ -4,14 +4,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-public abstract class AbstractCommand implements CommandExecutor {
+public abstract class AbstractCommand implements CommandExecutor, TabCompleter {
 
     private final Map<String, SubCommand> subCommandsMap = new HashMap<>();
 
@@ -24,6 +24,14 @@ public abstract class AbstractCommand implements CommandExecutor {
     public void addSubCommand(SubCommand subCommand) {
         subCommandsMap.put(subCommand.getName(), subCommand);
         Arrays.stream(subCommand.getAliases()).forEach(s -> subCommandsMap.put(s, subCommand));
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+        if (strings.length == 0)
+            return new ArrayList<>(subCommandsMap.keySet());
+        else
+            return Collections.emptyList();
     }
 
     @Override

@@ -52,7 +52,10 @@ public class SGGameLogic {
 
     private void startGracePeriod() {
         survivalGames.setPhase(SurvivalGames.Phase.GRACE_PERIOD);
-        survivalGames.getPlayers().forEach(p -> p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60 * 20, 5)));
+        survivalGames.getPlayers().forEach(p -> {
+            p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60 * 20, 5));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60 * 20, 0));
+        });
         survivalGames.setCurrentCountdown(new Countdown("Resistance ends in ", survivalGames.getPlayers(), 60, () -> startChestRefill(new AtomicInteger(0))).setTitle(SurvivalGames.TITLE).setDisplaySubtitle(false).start());
     }
 

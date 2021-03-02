@@ -87,8 +87,13 @@ public class SGEvents implements Listener {
         if (!survivalGames.getPhase().isInGame())
             return;
 
-        if (survivalGames.isSpectator(player))
-            event.setCancelled(true);
+        if (survivalGames.isSpectator(player)) {
+            if (event.getInventory() instanceof Chest) {
+                Chest chest = (Chest) event.getInventory();
+                if (chest.getCustomName() != null && !chest.getCustomName().contains("Press ESC to Exit"))
+                    event.setCancelled(true);
+            }
+        }
 
         if (!(event.getInventory().getHolder() instanceof Chest)) // ie. not a chest
             return;

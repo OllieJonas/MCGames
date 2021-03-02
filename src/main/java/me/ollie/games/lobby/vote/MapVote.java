@@ -3,14 +3,13 @@ package me.ollie.games.lobby.vote;
 import lombok.Getter;
 import lombok.Setter;
 import me.ollie.games.core.AbstractGameMap;
+import me.ollie.games.util.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Getter
 public class MapVote {
@@ -49,12 +48,14 @@ public class MapVote {
     }
 
     public AbstractGameMap getLeadingMap() {
-        return talley.entrySet()
+        List<AbstractGameMap> sorted = talley.entrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Map.Entry::getValue))
                 .map(Map.Entry::getKey)
-                .findFirst()
-                .orElseThrow(IllegalStateException::new);
+                .collect(Collectors.toList());
+
+        Collections.reverse(sorted);
+        return sorted.get(0);
     }
 
     private boolean hasPlayerAlreadyVoted(Player player) {
