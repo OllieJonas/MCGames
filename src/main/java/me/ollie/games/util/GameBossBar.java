@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GameBossBar {
 
@@ -19,14 +20,20 @@ public class GameBossBar {
     private final AtomicInteger currentStep;
 
     private final long time;
+
     private final TimeUnit timeUnit;
+
     @Getter
     private final List<BossBar> bossBar;
+
     private final Set<Player> audience;
+
     private final boolean repeating;
+
     private int taskId;
+
     @Getter
-    private BossBar currentBar;
+    private AtomicReference<BossBar> currentBar;
 
     public GameBossBar(BossBar... bars) {
         this(Sets.newConcurrentHashSet(), 1, TimeUnit.SECONDS, true, bars);
@@ -58,7 +65,7 @@ public class GameBossBar {
     }
 
     public GameBossBar run() {
-        this.currentBar = bossBar.get(0);
+        currentBar.set(bossBar.get(0));
         this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(Games.getInstance(), new Task(), 0L, TimeUnitToTicks.calculate(time, timeUnit));
         return this;
     }
@@ -73,12 +80,12 @@ public class GameBossBar {
     }
 
     public void hideCurrent(Player player) {
-        player.hideBossBar(currentBar);
+        player.hideBossBar(currentBar.get());
     }
 
     public void destroy() {
         Bukkit.getScheduler().cancelTask(taskId);
-        audience.forEach(p -> p.hideBossBar(currentBar));
+        audience.forEach(p -> p.hideBossBar(currentBar.get()));
     }
 
     private class Task implements Runnable {
@@ -94,10 +101,10 @@ public class GameBossBar {
 
             BossBar next = bossBar.get(currentStep.get());
             audience.forEach(p -> {
-                p.hideBossBar(currentBar);
+                p.hideBossBar(currentBar.get());
                 p.showBossBar(next);
             });
-            currentBar = next;
+            currentBar.set(next);
             currentStep.getAndIncrement();
 
             if ((currentStep.get() - 1) != 0 && currentStep.get() % bossBar.size() == 0) {
