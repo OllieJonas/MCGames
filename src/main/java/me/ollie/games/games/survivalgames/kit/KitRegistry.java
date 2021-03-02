@@ -33,6 +33,6 @@ public class KitRegistry {
     }
 
     public Kit randomKit() {
-        return kits.get(new Random().nextInt(kits.size() - 1));
+        return kits.get(new Random().nextInt(kits.size()) % kits.size());
     }
 }

@@ -12,7 +12,7 @@ public class CreateLobbyCommand extends SubCommand {
 
 
     public CreateLobbyCommand() {
-        super("createlobby", true, NO_ALIASES);
+        super("createlobby", true, new String[]{"new", "create"});
     }
 
     @Override

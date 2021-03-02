@@ -47,7 +47,7 @@ public class KitGUI {
             list.add(ChatColor.GRAY + " - " + i.getItemMeta().getDisplayName() + " x" + i.getAmount());
 
             for (Map.Entry<Enchantment, Integer> entry : i.getEnchantments().entrySet()) {
-                list.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "        " + EnchantmentToName.convert(entry.getKey()) + " " + RomanNumberUtil.toRoman(entry.getValue()));
+                list.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "    " + EnchantmentToName.convert(entry.getKey()) + " " + RomanNumberUtil.toRoman(entry.getValue()));
             }
 
         }
