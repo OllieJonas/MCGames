@@ -1,5 +1,6 @@
-package me.ollie.games.commands;
+package me.ollie.games.commands.game;
 
+import me.ollie.games.commands.SubCommand;
 import me.ollie.games.gui.GUIManager;
 import me.ollie.games.lobby.LobbyGUI;
 import org.bukkit.entity.Player;

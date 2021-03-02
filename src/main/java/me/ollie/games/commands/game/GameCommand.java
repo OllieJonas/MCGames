@@ -1,5 +1,6 @@
-package me.ollie.games.commands;
+package me.ollie.games.commands.game;
 
+import me.ollie.games.commands.AbstractCommand;
 import me.ollie.games.commands.test.ResetPlayerCommand;
 import me.ollie.games.commands.test.YanSucksCommand;
 

@@ -34,6 +34,7 @@ public class SGGameLogic {
         players.forEach(p -> {
             survivalGames.getPlayerKills().put(p.getUniqueId(), 0); // fill playerkills
             LobbyItems.resetItems(p);
+            GracePeriodItems.give(p);
             p.setFlying(false);
             p.setAllowFlight(false);
             survivalGames.sendTitleCard(p);
@@ -55,8 +56,12 @@ public class SGGameLogic {
         survivalGames.getPlayers().forEach(p -> {
             p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60 * 20, 5));
             p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60 * 20, 0));
+            GracePeriodItems.remove(p);
         });
-        survivalGames.setCurrentCountdown(new Countdown("Resistance ends in ", survivalGames.getPlayers(), 60, () -> startChestRefill(new AtomicInteger(0))).setTitle(SurvivalGames.TITLE).setDisplaySubtitle(false).start());
+        survivalGames.setCurrentCountdown(new Countdown("Resistance ends in ", survivalGames.getPlayers(), 60, () -> {
+            startChestRefill(new AtomicInteger(0));
+            survivalGames.getKitManager().giveKits();
+        }).setTitle(SurvivalGames.TITLE).setDisplaySubtitle(false).start());
     }
 
     private void startChestRefill(AtomicInteger counter) {
@@ -112,7 +117,7 @@ public class SGGameLogic {
         Bukkit.getScheduler().scheduleSyncDelayedTask(Games.getInstance(), () -> survivalGames.getPlayers().forEach(player -> {
             Bukkit.getScheduler().cancelTask(task);
             PlayerUtil.reset(player);
-            player.teleport(Games.SPAWN);
+            player.teleport(Games.SPAWN.get());
         }), 10 * 20L);
 
         Leaderboard.getInstance().updateScores();

@@ -6,6 +6,7 @@ import me.ollie.games.api.events.GamePlayerKillEvent;
 import me.ollie.games.core.AbstractGameMap;
 import me.ollie.games.games.AbstractGame;
 import me.ollie.games.games.SpectatorItems;
+import me.ollie.games.games.survivalgames.kit.KitManager;
 import me.ollie.games.lobby.LobbyManager;
 import me.ollie.games.util.Countdown;
 import me.ollie.games.util.MessageUtil;
@@ -38,10 +39,10 @@ public class SurvivalGames extends AbstractGame {
 
     private Map<UUID, Integer> playerKills;
 
-    @Setter
+    private KitManager kitManager;
+
     private Phase phase;
 
-    @Setter
     private Countdown currentCountdown;
 
     private SGMap map;
@@ -65,6 +66,7 @@ public class SurvivalGames extends AbstractGame {
 
     @Override
     public void startGame(Set<Player> players) {
+        this.kitManager = new KitManager(players);
         gameLogic.startGame(players);
     }
 

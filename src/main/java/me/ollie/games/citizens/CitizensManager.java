@@ -30,7 +30,7 @@ public class CitizensManager {
     }
 
     public void destroy() {
-        actions.keySet().stream().map(uuid -> CitizensAPI.getNPCRegistry().getByUniqueId(uuid)).forEach(NPC::destroy);
+        CitizensAPI.getNPCRegistry().forEach(npc -> CitizensAPI.getNPCRegistry().deregister(npc));
     }
 
 

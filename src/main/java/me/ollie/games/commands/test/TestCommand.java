@@ -13,5 +13,6 @@ public class TestCommand extends AbstractCommand {
         addSubCommand(new ClearInventoryCommand());
         addSubCommand(new FireworkCommand());
         addSubCommand(new ResetPlayerCommand());
+        addSubCommand(new KitsCommand());
     }
 }

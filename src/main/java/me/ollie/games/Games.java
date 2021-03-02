@@ -3,11 +3,12 @@ package me.ollie.games;
 import lombok.Getter;
 import me.ollie.games.citizens.CitizenEvents;
 import me.ollie.games.citizens.CitizensManager;
-import me.ollie.games.commands.GameCommand;
+import me.ollie.games.commands.game.GameCommand;
 import me.ollie.games.commands.test.TestCommand;
 import me.ollie.games.events.ChatEvents;
 import me.ollie.games.events.RandomBoringEvents;
 import me.ollie.games.games.SpectatorItems;
+import me.ollie.games.games.survivalgames.GracePeriodItems;
 import me.ollie.games.games.survivalgames.events.SGEvents;
 import me.ollie.games.gui.GUIEvents;
 import me.ollie.games.lobby.LobbyEvents;
@@ -17,9 +18,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.function.Supplier;
+
 public final class Games extends JavaPlugin {
 
-    public static final Location SPAWN = new Location(Bukkit.getWorld("world"), 473.5, 10.5, 98.5, -180F, 0F);
+    public static final Supplier<Location> SPAWN = () -> new Location(Bukkit.getWorld("world"), 473.5, 10.5, 98.5, -180F, 0F);
     @Getter
     public static Games instance;
 
@@ -55,6 +58,7 @@ public final class Games extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SGEvents(), this);
         Bukkit.getPluginManager().registerEvents(new SpectatorItems(), this);
         Bukkit.getPluginManager().registerEvents(new CitizenEvents(), this);
+        Bukkit.getPluginManager().registerEvents(new GracePeriodItems(), this);
     }
 
     private void clearWeather() {

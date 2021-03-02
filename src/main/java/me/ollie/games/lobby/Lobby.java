@@ -27,7 +27,7 @@ import java.util.function.BiConsumer;
 @Getter
 public class Lobby {
 
-    private static final Location GAMES_LOBBY_LOCATION = new Location(Bukkit.getWorld("lobby"), -898.5, 98.5, 1158.5);
+    private static final Location GAMES_LOBBY_LOCATION = new Location(Bukkit.getWorld("lobby"), 68.5, 212.5, 61.5, 180, 0);
 
     private final GameBossBar waitingForPlayers = new GameBossBar(
             BossBar.bossBar(Component.text(ChatColor.AQUA + "Waiting for players."), 1F, BossBar.Color.BLUE, BossBar.Overlay.NOTCHED_20),
@@ -84,7 +84,7 @@ public class Lobby {
 
         sendMessageToAll(ChatColor.AQUA + player.getName() + ChatColor.GRAY + " has left! (" + ChatColor.AQUA + players.size() + ChatColor.GRAY + " / " + ChatColor.AQUA + maxPlayers + ChatColor.GRAY + ")");
         player.sendMessage(ChatColor.GRAY + "You left the lobby!");
-        player.teleport(Games.SPAWN);
+        player.teleport(Games.SPAWN.get());
     }
 
     public void startEndingVoting() {
