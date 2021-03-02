@@ -62,6 +62,7 @@ public class GameBossBar {
         this.timeUnit = timeUnit;
         this.repeating = repeating;
         this.bossBar = bars;
+        this.currentBar = new AtomicReference<>();
     }
 
     public GameBossBar run() {
