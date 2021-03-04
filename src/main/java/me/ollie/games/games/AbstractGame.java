@@ -8,13 +8,14 @@ import org.bukkit.entity.Player;
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
 public abstract class AbstractGame {
 
-    @Getter
+
     protected final Set<Player> spectators;
-    @Getter
-    private final String name;
-    @Getter
+
+    protected final String name;
+
     @Setter
     protected Set<Player> players;
 

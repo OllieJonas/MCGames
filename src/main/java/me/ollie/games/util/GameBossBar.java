@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class GameBossBar {
 
-
     private final AtomicInteger currentStep;
 
     private final long time;
@@ -33,7 +32,7 @@ public class GameBossBar {
     private int taskId;
 
     @Getter
-    private AtomicReference<BossBar> currentBar;
+    private final AtomicReference<BossBar> currentBar;
 
     public GameBossBar(BossBar... bars) {
         this(Sets.newConcurrentHashSet(), 1, TimeUnit.SECONDS, true, bars);

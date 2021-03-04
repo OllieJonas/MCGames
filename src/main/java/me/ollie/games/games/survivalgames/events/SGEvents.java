@@ -123,7 +123,10 @@ public class SGEvents implements Listener {
 
         SurvivalGames survivalGames = (SurvivalGames) lobby.getGame();
 
+        victim.getWorld().strikeLightningEffect(victim.getLocation());
+
         victim.setHealth(20D); // avoids death screen
+        MessageUtil.broadcast("" + (killer != null));
 
         if (killer != null)
             survivalGames.handlePlayerKill(event, killer, victim);

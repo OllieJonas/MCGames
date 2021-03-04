@@ -6,6 +6,7 @@ authors: [ Ollie ]
 description: Bunch of Games Plugin Time
 depend:
   - Citizens
+  - HolographicDisplays
 
 commands:
   game:

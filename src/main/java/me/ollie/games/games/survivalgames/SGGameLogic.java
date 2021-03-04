@@ -28,8 +28,8 @@ public class SGGameLogic {
     }
 
     public void startGame(Set<Player> players) {
-        survivalGames.setPlayers(players);
-        survivalGames.setAlivePlayers(players);
+        survivalGames.setPlayers(new HashSet<>(players)); // new hashset bc weird pass-by-reference stuff w the original players set
+        survivalGames.setAlivePlayers(new HashSet<>(players));
 
         players.forEach(p -> {
             survivalGames.getPlayerKills().put(p.getUniqueId(), 0); // fill playerkills
@@ -91,6 +91,7 @@ public class SGGameLogic {
     public void deathmatch() {
         survivalGames.setPhase(SurvivalGames.Phase.DEATHMATCH_STARTING);
         teleportAllRemainingPlayersToSpawn();
+        survivalGames.getCurrentCountdown().destroy();
         survivalGames.setCurrentCountdown(new Countdown("Deathmatch starts in ", survivalGames.getPlayers(), 10, () -> {
             survivalGames.setPhase(SurvivalGames.Phase.DEATHMATCH);
             chestRefill();
@@ -100,16 +101,21 @@ public class SGGameLogic {
     private void teleportAllRemainingPlayersToSpawn() {
         Set<Player> remainingPlayers = survivalGames.getAlivePlayers();
         List<Location> spawnLocations = new ArrayList<>(survivalGames.getMap().getSpawnLocations());
+
         int separator = (spawnLocations.size() - 1) / remainingPlayers.size();
+
         AtomicInteger count = new AtomicInteger(0);
         remainingPlayers.forEach(p -> p.teleport(spawnLocations.get(count.getAndAdd(separator))));
     }
 
     public Player endGame() {
         Set<Player> remainingPlayers = survivalGames.getAlivePlayers();
+
         if (remainingPlayers.size() > 1)
             throw new IllegalStateException("wow you dun fucked up (more than one remaining player on endgame)");
+
         Player winner = remainingPlayers.stream().findFirst().orElseThrow(() -> new IllegalStateException("well looks like noone won then rip"));
+
         survivalGames.broadcast(ChatColor.AQUA + winner.getName() + ChatColor.GRAY + " has won!");
 
         int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(Games.getInstance(), () -> FireworkUtil.spawnFireworksAroundPlayer(winner), 0L, 20L);

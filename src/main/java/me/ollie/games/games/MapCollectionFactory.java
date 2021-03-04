@@ -1,5 +1,6 @@
 package me.ollie.games.games;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.experimental.UtilityClass;
 import me.ollie.games.core.AbstractGameMap;
@@ -21,11 +22,12 @@ public class MapCollectionFactory {
 
         List<AbstractGameMap> maps = new ArrayList<>();
         if (game.getName().equals("Survival Games")) {
+
             World turbulence = Bukkit.getWorld("sg_turbulence");
             World breezeIsland = Bukkit.getWorld("sg_breeze_island_2");
             World vareide = Bukkit.getWorld("sg_vareide");
 
-            maps.add(new SGMap("Turbulence", turbulence, Sets.newHashSet(
+            maps.add(new SGMap("Turbulence", turbulence, Lists.newArrayList(
                     new Location(turbulence, 1078.5, 53.5, -46.5, 170, 0),
                     new Location(turbulence, 1084.5, 53.5, -48.5, 152, 0),
                     new Location(turbulence, 1089.5, 53.5, -51.5, 133, 0),
@@ -52,7 +54,7 @@ public class MapCollectionFactory {
                     new Location(turbulence, 1072.5, 53.5, -46.5, -170, 0)
             )));
 
-            maps.add(new SGMap("Breeze Island 2", breezeIsland, Sets.newHashSet(
+            maps.add(new SGMap("Breeze Island 2", breezeIsland, Lists.newArrayList(
                     new Location(breezeIsland, -5.5, 67.5, 32.5, -105, -8),
                     new Location(breezeIsland, -2.5, 67.5, 37.5, -120, -8),
                     new Location(breezeIsland, 0.5, 67.5, 42.5, -135, -8),

@@ -29,7 +29,7 @@ public class GracePeriodItems implements Listener {
     }
 
     public static void remove(Player player) {
-        player.sendMessage(SurvivalGames.TITLE + " You will receive your kit in " + ChatColor.AQUA + "1 minute");
+        player.sendMessage(SurvivalGames.TITLE + ChatColor.DARK_GRAY + " | " + ChatColor.GRAY + " You will receive your kit in " + ChatColor.AQUA + "1 minute");
         player.getInventory().clear(0);
     }
 

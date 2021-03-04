@@ -90,27 +90,28 @@ public class SurvivalGames extends AbstractGame {
     }
 
     public void handlePlayerKill(PlayerDeathEvent event, Player killer, Player victim) {
+        MessageUtil.broadcast("handlePlayerKill");
         alivePlayers.remove(event.getEntity());
 
-        Bukkit.getPluginManager().callEvent(new GamePlayerKillEvent<>(killer, victim, this));
+        // Bukkit.getPluginManager().callEvent(new GamePlayerKillEvent<>(killer, victim, this));
         int newKills = playerKills.get(killer.getUniqueId()) + 1;
+
         killer.sendMessage(ChatColor.GRAY + "Kill! Total Kills: " + ChatColor.AQUA + newKills);
         killer.sendMessage(ChatColor.GRAY + "Applied " + ChatColor.AQUA + "Strength I" + ChatColor.GRAY + " for " + ChatColor.AQUA + "5 seconds!");
         killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5 * 20, 0));
+
         playerKills.put(killer.getUniqueId(), newKills);
 
         int remainingPlayers = alivePlayers.size();
         broadcast(ChatColor.AQUA + victim.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.AQUA + killer.getName() + "! " + ChatColor.GRAY + "There are " + ChatColor.AQUA + remainingPlayers + ChatColor.GRAY + " remaining!");
-
+        event.setDeathMessage("");
         doHandleDeath(event);
     }
 
     public void handlePlayerDeath(PlayerDeathEvent event) {
-        MessageUtil.broadcast("handlePlayerDeath");
         alivePlayers.remove(event.getEntity());
 
         String message = event.getDeathMessage();
-        MessageUtil.broadcast(message);
         broadcast(ChatColor.AQUA + message + "! " + ChatColor.GRAY + "There are " + ChatColor.AQUA + alivePlayers.size() + ChatColor.GRAY + " players remaining!");
 
         doHandleDeath(event);
@@ -133,7 +134,6 @@ public class SurvivalGames extends AbstractGame {
     }
 
     public void setSpectator(Player player) {
-        MessageUtil.broadcast("setSpecator");
         player.showTitle(Title.title(Component.text(ChatColor.RED + "You died! :("), Component.text(ChatColor.GRAY + "You can spectate others by right clicking the clock")));
         player.setAllowFlight(true);
         player.setGameMode(GameMode.CREATIVE);
