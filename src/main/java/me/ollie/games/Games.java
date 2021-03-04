@@ -9,6 +9,7 @@ import me.ollie.games.commands.game.GameCommand;
 import me.ollie.games.commands.test.TestCommand;
 import me.ollie.games.events.ChatEvents;
 import me.ollie.games.events.RandomBoringEvents;
+import me.ollie.games.games.SpectatorEvents;
 import me.ollie.games.games.SpectatorItems;
 import me.ollie.games.games.survivalgames.GracePeriodItems;
 import me.ollie.games.games.survivalgames.events.SGEvents;
@@ -72,6 +73,7 @@ public final class Games extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SpectatorItems(), this);
         Bukkit.getPluginManager().registerEvents(new CitizenEvents(), this);
         Bukkit.getPluginManager().registerEvents(new GracePeriodItems(), this);
+        Bukkit.getPluginManager().registerEvents(new SpectatorEvents(), this);
     }
 
     private void alwaysDay() {
