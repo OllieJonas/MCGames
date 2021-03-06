@@ -17,11 +17,11 @@ import me.ollie.games.games.survivalgames.events.SGEvents;
 import me.ollie.games.gui.GUIEvents;
 import me.ollie.games.leaderboard.Leaderboard;
 import me.ollie.games.leaderboard.LeaderboardEvents;
-import me.ollie.games.leaderboard.LeaderboardHologram;
 import me.ollie.games.lobby.LobbyEvents;
 import me.ollie.games.lobby.LobbyItems;
 import me.ollie.games.util.BossBarManager;
 import me.ollie.games.util.MiscUtil;
+import me.ollie.games.util.potion.PotionEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -79,6 +79,7 @@ public final class Games extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new GracePeriodItems(), this);
         Bukkit.getPluginManager().registerEvents(new SpectatorEvents(), this);
         Bukkit.getPluginManager().registerEvents(new LeaderboardEvents(), this);
+        Bukkit.getPluginManager().registerEvents(new PotionEvents(), this);
     }
 
     private void alwaysDay() {

@@ -1,6 +1,7 @@
 package me.ollie.games.commands.test;
 
 import me.ollie.games.commands.AbstractCommand;
+import me.ollie.games.util.potion.Potion;
 
 public class TestCommand extends AbstractCommand {
 
@@ -17,5 +18,6 @@ public class TestCommand extends AbstractCommand {
         addSubCommand(new DrybonyValleyCommand());
         addSubCommand(new TestSpawnLocations());
         addSubCommand(new AddLeaderboardScoreCommand());
+        addSubCommand(new PotionsCommand());
     }
 }

@@ -11,9 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerRecipeDiscoverEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import sun.jvm.hotspot.ui.ObjectHistogramPanel;
 
 @SuppressWarnings("DuplicatedCode")
 public class SpectatorEvents implements Listener {
