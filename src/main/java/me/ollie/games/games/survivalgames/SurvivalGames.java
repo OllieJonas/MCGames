@@ -2,17 +2,14 @@ package me.ollie.games.games.survivalgames;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.ollie.games.api.events.GamePlayerKillEvent;
 import me.ollie.games.core.AbstractGameMap;
 import me.ollie.games.games.AbstractGame;
 import me.ollie.games.games.SpectatorItems;
 import me.ollie.games.games.survivalgames.kit.KitManager;
 import me.ollie.games.lobby.LobbyManager;
 import me.ollie.games.util.Countdown;
-import me.ollie.games.util.MessageUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -90,7 +87,6 @@ public class SurvivalGames extends AbstractGame {
     }
 
     public void handlePlayerKill(PlayerDeathEvent event, Player killer, Player victim) {
-        MessageUtil.broadcast("handlePlayerKill");
         alivePlayers.remove(event.getEntity());
 
         // Bukkit.getPluginManager().callEvent(new GamePlayerKillEvent<>(killer, victim, this));

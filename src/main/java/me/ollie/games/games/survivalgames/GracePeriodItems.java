@@ -48,11 +48,7 @@ public class GracePeriodItems implements Listener {
 
         if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("Launch Firework")) {
             int amount = item.getAmount();
-
-            if (amount == 1)
-                player.getInventory().remove(event.getItem());
-            else
-                item.setAmount(amount - 1);
+            item.setAmount(amount - 1);
 
             FireworkUtil.spawnFireworksAroundPlayer(player);
             player.sendMessage(ChatColor.GRAY + "Launched fireworks!");

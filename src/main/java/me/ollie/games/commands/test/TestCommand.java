@@ -14,5 +14,7 @@ public class TestCommand extends AbstractCommand {
         addSubCommand(new FireworkCommand());
         addSubCommand(new ResetPlayerCommand());
         addSubCommand(new KitsCommand());
+        addSubCommand(new DrybonyValleyCommand());
+        addSubCommand(new TestSpawnLocations());
     }
 }

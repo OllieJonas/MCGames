@@ -9,11 +9,13 @@ import me.ollie.games.commands.game.GameCommand;
 import me.ollie.games.commands.test.TestCommand;
 import me.ollie.games.events.ChatEvents;
 import me.ollie.games.events.RandomBoringEvents;
+import me.ollie.games.games.MapCollectionFactory;
 import me.ollie.games.games.SpectatorEvents;
 import me.ollie.games.games.SpectatorItems;
 import me.ollie.games.games.survivalgames.GracePeriodItems;
 import me.ollie.games.games.survivalgames.events.SGEvents;
 import me.ollie.games.gui.GUIEvents;
+import me.ollie.games.leaderboard.Leaderboard;
 import me.ollie.games.leaderboard.LeaderboardHologram;
 import me.ollie.games.lobby.LobbyEvents;
 import me.ollie.games.lobby.LobbyItems;
@@ -38,8 +40,9 @@ public final class Games extends JavaPlugin {
         registerCommands();
         registerListeners();
 
-        new LeaderboardHologram(this);
+        MapCollectionFactory.initMaps();
 
+        new Leaderboard(this);
         MiscUtil.disableAchievements();
 
         buildWelcomeHologram();

@@ -126,8 +126,6 @@ public class SGGameLogic {
             player.teleport(Games.SPAWN.get());
         }), 10 * 20L);
 
-        Leaderboard.getInstance().updateScores();
-
         return winner;
     }
 }

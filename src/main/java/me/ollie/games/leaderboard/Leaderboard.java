@@ -6,10 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -22,6 +19,8 @@ public class Leaderboard {
     private static final Supplier<Location> LEADERBOARD_LOCATION_RIGHT = () -> new Location(Bukkit.getWorld("world"), 489.5, 4.5 + HEIGHT, 72.5, 90, 0);
 
     private Plugin plugin;
+
+    private Set<Player> players;
 
     private LeaderboardHologram hologramLeft;
 
@@ -36,6 +35,7 @@ public class Leaderboard {
     public Leaderboard(Plugin plugin) {
         this.plugin = plugin;
         this.scores = new HashMap<>();
+        this.players = new HashSet<>(Bukkit.getOnlinePlayers());
         this.hologramLeft = new LeaderboardHologram(plugin, this, LEADERBOARD_LOCATION_LEFT.get());
         this.hologramRight = new LeaderboardHologram(plugin, this, LEADERBOARD_LOCATION_RIGHT.get());
 
