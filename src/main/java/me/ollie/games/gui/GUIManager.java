@@ -12,16 +12,16 @@ public class GUIManager {
 
     private final Map<UUID, GUI> openedGuis = new HashMap<>();
 
-    private final Map<GUI, Set<Player>> observers = new HashMap<>();
+    private final Map<String, Set<Player>> observers = new HashMap<>();
 
 
     public void openGuiFor(Player player, GUI gui) {
         openedGuis.put(player.getUniqueId(), gui);
 
-        if (!observers.containsKey(gui))
-            observers.put(gui, new HashSet<>());
+        if (!observers.containsKey(gui.getName()))
+            observers.put(gui.getName(), new HashSet<>());
 
-        observers.get(gui).add(player);
+        observers.get(gui.getName()).add(player);
 
         gui.open(player);
     }
@@ -31,11 +31,13 @@ public class GUIManager {
 
         GUI gui = openedGuis.remove(uuid);
 
-        if (observers.get(gui) != null)
-            observers.get(gui).remove(player);
-
-        if (gui != null)
+        if (gui != null) {
             gui.close(player);
+
+            if (observers.get(gui.getName()) != null)
+                observers.get(gui.getName()).remove(player);
+        }
+
     }
 
     public GUI getGuiFor(Player player) {
@@ -43,6 +45,6 @@ public class GUIManager {
     }
 
     public void notifyAllObservers(GUI gui) {
-        observers.get(gui).forEach(player -> gui.redraw());
+        observers.get(gui.getName()).forEach(player -> gui.redraw());
     }
 }
