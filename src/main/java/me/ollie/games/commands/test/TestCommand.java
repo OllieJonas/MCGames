@@ -16,5 +16,6 @@ public class TestCommand extends AbstractCommand {
         addSubCommand(new KitsCommand());
         addSubCommand(new DrybonyValleyCommand());
         addSubCommand(new TestSpawnLocations());
+        addSubCommand(new AddLeaderboardScoreCommand());
     }
 }

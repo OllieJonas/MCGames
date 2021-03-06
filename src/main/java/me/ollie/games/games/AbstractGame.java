@@ -29,5 +29,9 @@ public abstract class AbstractGame {
 
     public abstract void startGame(Set<Player> players);
 
-    public abstract void endGame();
+    public abstract void endGame(boolean forced);
+
+    public void endGame() {
+        endGame(false);
+    }
 }

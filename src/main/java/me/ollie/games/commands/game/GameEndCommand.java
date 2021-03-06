@@ -22,6 +22,6 @@ public class GameEndCommand extends SubCommand {
             return;
         }
         sender.sendMessage(ChatColor.GRAY + "Force ending game... (SHOULD ONLY BE USED FOR TESTING OTHERWISE YA DUN FUCKED UP BUDDY)");
-        lobby.getGame().endGame();
+        lobby.getGame().endGame(true);
     }
 }

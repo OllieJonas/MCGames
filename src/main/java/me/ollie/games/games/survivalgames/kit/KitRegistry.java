@@ -20,7 +20,15 @@ public class KitRegistry {
     static {
         kits = new ArrayList<>();
         iconToKitMap = new HashMap<>();
-        add(new Kit("Swordsman", Material.STONE_SWORD, Lists.newArrayList(new ItemStackBuilder(Material.STONE_SWORD).withName("Stone Sword").withEnchantment(Enchantment.DAMAGE_ALL, 1).build())));
+        add(new Kit("Knight", Material.STONE_SWORD, Lists.newArrayList(
+                new ItemStackBuilder(Material.STONE_SWORD).withName("Stone Sword").withEnchantment(Enchantment.DAMAGE_ALL, 1).build(),
+                new ItemStackBuilder(Material.GOLDEN_CHESTPLATE).withName("Golden Chestplate").withEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build()
+        )));
+        add(new Kit("Archer", Material.BOW, Lists.newArrayList(
+                new ItemStackBuilder(Material.BOW).withName("Bow").withEnchantment(Enchantment.DURABILITY, 1).build(),
+                new ItemStackBuilder(Material.ARROW).withAmount(12).build(),
+                new ItemStackBuilder(Material.DIAMOND_HELMET).withEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build()
+        )));
     }
 
     private void add(Kit kit) {

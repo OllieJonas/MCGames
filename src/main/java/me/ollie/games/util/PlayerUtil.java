@@ -14,5 +14,6 @@ public class PlayerUtil {
         player.setAllowFlight(false);
         player.setInvisible(false);
         player.setHealth(20D);
+        player.setFireTicks(0);
     }
 }

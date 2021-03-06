@@ -3,12 +3,15 @@ package me.ollie.games.games.survivalgames;
 import me.ollie.games.Games;
 import me.ollie.games.leaderboard.Leaderboard;
 import me.ollie.games.lobby.LobbyItems;
+import me.ollie.games.lobby.LobbyManager;
 import me.ollie.games.util.Countdown;
 import me.ollie.games.util.FireworkUtil;
+import me.ollie.games.util.MessageUtil;
 import me.ollie.games.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -18,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class SGGameLogic {
 
@@ -32,7 +36,7 @@ public class SGGameLogic {
         survivalGames.setAlivePlayers(new HashSet<>(players));
 
         players.forEach(p -> {
-            survivalGames.getPlayerKills().put(p.getUniqueId(), 0); // fill playerkills
+            survivalGames.getPlayerKills().put(p.getName(), 0); // fill playerkills
             LobbyItems.resetItems(p);
             GracePeriodItems.give(p);
             p.setFlying(false);
@@ -84,7 +88,7 @@ public class SGGameLogic {
     }
 
     public void startDeathmatchCounter() {
-        survivalGames.getCurrentCountdown().interrupt();
+        survivalGames.getCurrentCountdown().destroy();
         survivalGames.setCurrentCountdown(new Countdown("Deathmatch starting in ", survivalGames.getPlayers(), 60, this::deathmatch).setTitle(SurvivalGames.TITLE).start());
     }
 
@@ -108,10 +112,12 @@ public class SGGameLogic {
         remainingPlayers.forEach(p -> p.teleport(spawnLocations.get(count.getAndAdd(separator))));
     }
 
-    public Player endGame() {
+    public Player endGame(boolean forced) {
+        survivalGames.setPhase(SurvivalGames.Phase.END);
+
         Set<Player> remainingPlayers = survivalGames.getAlivePlayers();
 
-        if (remainingPlayers.size() > 1)
+        if (remainingPlayers.size() > 1 && !forced)
             throw new IllegalStateException("wow you dun fucked up (more than one remaining player on endgame)");
 
         Player winner = remainingPlayers.stream().findFirst().orElseThrow(() -> new IllegalStateException("well looks like noone won then rip"));
@@ -120,12 +126,19 @@ public class SGGameLogic {
 
         int task = Bukkit.getScheduler().scheduleSyncRepeatingTask(Games.getInstance(), () -> FireworkUtil.spawnFireworksAroundPlayer(winner), 0L, 20L);
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(Games.getInstance(), () -> survivalGames.getPlayers().forEach(player -> {
-            Bukkit.getScheduler().cancelTask(task);
-            PlayerUtil.reset(player);
-            player.teleport(Games.SPAWN.get());
-        }), 10 * 20L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(Games.getInstance(), () -> {
 
+            survivalGames.getPlayers().forEach(player -> {
+                Bukkit.getScheduler().cancelTask(task);
+                PlayerUtil.reset(player);
+                player.teleport(Games.SPAWN.get());
+            });
+
+            LobbyManager.getInstance().removeLobby(LobbyManager.getInstance().getLobbyIdFor(winner));
+        }, 10 * 20L);
+
+        Leaderboard.getInstance().addScores(survivalGames.getPlayerKills(), winner);
+        survivalGames.getCurrentCountdown().destroy();
         return winner;
     }
 }

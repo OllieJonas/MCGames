@@ -1,5 +1,6 @@
 package me.ollie.games.lobby;
 
+import me.ollie.games.Games;
 import me.ollie.games.util.MessageUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -8,11 +9,28 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.util.Vector;
 
 public class LobbyEvents implements Listener {
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        event.getPlayer().teleport(Games.SPAWN.get());
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+
+        if (!LobbyManager.getInstance().isInLobby(player)) return;
+
+        Lobby lobby = LobbyManager.getInstance().getLobbyFor(player);
+        lobby.removePlayer(player);
+    }
 
 
     // prevent people taking damage

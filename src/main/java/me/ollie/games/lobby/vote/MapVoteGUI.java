@@ -6,6 +6,7 @@ import me.ollie.games.gui.GUI;
 import me.ollie.games.gui.GUIItem;
 import me.ollie.games.gui.GUIManager;
 import me.ollie.games.util.ItemStackBuilder;
+import me.ollie.games.util.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

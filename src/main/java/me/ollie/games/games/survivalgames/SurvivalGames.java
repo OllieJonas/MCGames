@@ -6,6 +6,7 @@ import me.ollie.games.core.AbstractGameMap;
 import me.ollie.games.games.AbstractGame;
 import me.ollie.games.games.SpectatorItems;
 import me.ollie.games.games.survivalgames.kit.KitManager;
+import me.ollie.games.games.survivalgames.scoreboard.SGScoreboardManager;
 import me.ollie.games.lobby.LobbyManager;
 import me.ollie.games.util.Countdown;
 import net.kyori.adventure.text.Component;
@@ -34,7 +35,7 @@ public class SurvivalGames extends AbstractGame {
 
     private Set<Player> disconnectedPlayers;
 
-    private Map<UUID, Integer> playerKills;
+    private Map<String, Integer> playerKills;
 
     private KitManager kitManager;
 
@@ -43,6 +44,8 @@ public class SurvivalGames extends AbstractGame {
     private Countdown currentCountdown;
 
     private SGMap map;
+
+    private SGScoreboardManager scoreboardManager;
 
     public SurvivalGames() {
         super("Survival Games");
@@ -64,14 +67,16 @@ public class SurvivalGames extends AbstractGame {
     @Override
     public void startGame(Set<Player> players) {
         this.kitManager = new KitManager(players);
+        this.scoreboardManager = new SGScoreboardManager(this);
         gameLogic.startGame(players);
+        scoreboardManager.addPlayers(players);
     }
 
     @Override
-    public void endGame() {
+    public void endGame(boolean forced) {
         currentCountdown.destroy();
-        Player winner = gameLogic.endGame();
-        LobbyManager.getInstance().removeLobby(LobbyManager.getInstance().getLobbyIdFor(winner));
+        scoreboardManager.destroy();
+        Player winner = gameLogic.endGame(forced);
     }
 
     public void addLootedChest(Location location) {
@@ -90,13 +95,13 @@ public class SurvivalGames extends AbstractGame {
         alivePlayers.remove(event.getEntity());
 
         // Bukkit.getPluginManager().callEvent(new GamePlayerKillEvent<>(killer, victim, this));
-        int newKills = playerKills.get(killer.getUniqueId()) + 1;
+        int newKills = playerKills.get(killer.getName()) + 1;
 
         killer.sendMessage(ChatColor.GRAY + "Kill! Total Kills: " + ChatColor.AQUA + newKills);
         killer.sendMessage(ChatColor.GRAY + "Applied " + ChatColor.AQUA + "Strength I" + ChatColor.GRAY + " for " + ChatColor.AQUA + "5 seconds!");
         killer.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 5 * 20, 0));
 
-        playerKills.put(killer.getUniqueId(), newKills);
+        playerKills.put(killer.getName(), newKills);
 
         int remainingPlayers = alivePlayers.size();
         broadcast(ChatColor.AQUA + victim.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.AQUA + killer.getName() + "! " + ChatColor.GRAY + "There are " + ChatColor.AQUA + remainingPlayers + ChatColor.GRAY + " remaining!");
@@ -119,6 +124,8 @@ public class SurvivalGames extends AbstractGame {
         int remainingPlayers = alivePlayers.size();
 
         setSpectator(event.getEntity());
+
+        scoreboardManager.redraw();
 
         if (remainingPlayers == 2) { // deathmatch
             gameLogic.startDeathmatchCounter();
@@ -150,6 +157,9 @@ public class SurvivalGames extends AbstractGame {
         return spectators.contains(player);
     }
 
+    public int getKills(Player player) {
+        return playerKills.get(player.getName());
+    }
 
     public enum Phase {
         PRE_INIT,

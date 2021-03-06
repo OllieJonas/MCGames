@@ -110,7 +110,7 @@ public class MapCollectionFactory {
         sgMaps.add(new SGMap("Drybony Valley", drybonyValley, Lists.newArrayList(
                 new Location(drybonyValley, -1208.5 , 18.5 , 312.5 , -15 , 0),
                 new Location(drybonyValley, -1213.5 , 18.5 , 314.5 , -30 , 0),
-                new Location(drybonyValley, -1217.5 , 18.5 , 312.5 , -44 , 0),
+                new Location(drybonyValley, -1217.5 , 18.5 , 317.5 , -44 , 0),
                 new Location(drybonyValley, -1220.5 , 18.5 , 321.5 , -58 , 0),
                 new Location(drybonyValley, -1222.5 , 18.5 , 326.5 , -75 , 0),
                 new Location(drybonyValley, -1223.5 , 18.5 , 331.5 , -90 , 0),

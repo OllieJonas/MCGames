@@ -1,17 +1,41 @@
 package me.ollie.games.games;
 
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import me.ollie.games.games.survivalgames.SurvivalGames;
 import me.ollie.games.lobby.LobbyManager;
+import me.ollie.games.util.MessageUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerRecipeDiscoverEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import sun.jvm.hotspot.ui.ObjectHistogramPanel;
 
 @SuppressWarnings("DuplicatedCode")
 public class SpectatorEvents implements Listener {
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerPostRespawnEvent event) {
+
+        LobbyManager lobbyManager = LobbyManager.getInstance();
+        Player player = event.getPlayer();
+
+        if (!lobbyManager.isInGame(player))
+            return;
+
+        AbstractGame abstractGame = lobbyManager.getLobbyFor(player).getGame();
+
+        if (abstractGame instanceof SurvivalGames) {
+            SurvivalGames survivalGames = (SurvivalGames) abstractGame;
+            if (survivalGames.isSpectator(player))
+                SpectatorItems.give(player);
+        }
+    }
+
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event) {
@@ -36,6 +60,24 @@ public class SpectatorEvents implements Listener {
         }
     }
 
+    @EventHandler
+    public void onDamage(PlayerAttemptPickupItemEvent event) {
+        Player player = event.getPlayer();
+
+        LobbyManager lobbyManager = LobbyManager.getInstance();
+
+        if (!lobbyManager.isInGame(player))
+            return;
+
+        AbstractGame abstractGame = lobbyManager.getLobbyFor(player).getGame();
+
+        if (abstractGame instanceof SurvivalGames) {
+            SurvivalGames survivalGames = (SurvivalGames) abstractGame;
+            if (survivalGames.isSpectator(player))
+                event.setCancelled(true);
+        }
+    }
+
     public void dropBlocks(PlayerDropItemEvent event) {
         Player dropper = event.getPlayer();
         LobbyManager lobbyManager = LobbyManager.getInstance();
@@ -47,8 +89,10 @@ public class SpectatorEvents implements Listener {
 
         if (abstractGame instanceof SurvivalGames) {
             SurvivalGames survivalGames = (SurvivalGames) abstractGame;
-            if (survivalGames.isSpectator(dropper))
+            if (survivalGames.isSpectator(dropper)) {
+                MessageUtil.broadcast("cancelled");
                 event.setCancelled(true);
+            }
         }
     }
 }

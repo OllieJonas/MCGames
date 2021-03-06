@@ -3,6 +3,7 @@ package me.ollie.games.citizens;
 import lombok.Getter;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.npc.NPCRegistry;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -30,8 +31,6 @@ public class CitizensManager {
     }
 
     public void destroy() {
-        CitizensAPI.getNPCRegistry().forEach(npc -> CitizensAPI.getNPCRegistry().deregister(npc));
+        CitizensAPI.getNPCRegistries().forEach(NPCRegistry::deregisterAll);
     }
-
-
 }

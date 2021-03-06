@@ -16,6 +16,7 @@ import me.ollie.games.games.survivalgames.GracePeriodItems;
 import me.ollie.games.games.survivalgames.events.SGEvents;
 import me.ollie.games.gui.GUIEvents;
 import me.ollie.games.leaderboard.Leaderboard;
+import me.ollie.games.leaderboard.LeaderboardEvents;
 import me.ollie.games.leaderboard.LeaderboardHologram;
 import me.ollie.games.lobby.LobbyEvents;
 import me.ollie.games.lobby.LobbyItems;
@@ -77,6 +78,7 @@ public final class Games extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new CitizenEvents(), this);
         Bukkit.getPluginManager().registerEvents(new GracePeriodItems(), this);
         Bukkit.getPluginManager().registerEvents(new SpectatorEvents(), this);
+        Bukkit.getPluginManager().registerEvents(new LeaderboardEvents(), this);
     }
 
     private void alwaysDay() {

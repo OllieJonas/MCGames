@@ -43,6 +43,11 @@ public class SGEvents implements Listener {
             return;
 
         SurvivalGames survivalGames = (SurvivalGames) lobby.getGame();
+
+        if (survivalGames.getPhase() == SurvivalGames.Phase.END) {
+            event.setCancelled(true);
+        }
+
         if (survivalGames.isSpectator(player))
             event.setCancelled(true);
     }
@@ -102,6 +107,8 @@ public class SGEvents implements Listener {
 
         if ((survivalGames.isChestAlreadyLooted(location))) // ie. already looted
             return;
+
+        event.getInventory().clear(); // incase the map decides to put their own items
 
         Map<Integer, ItemStack> items = SGChest.buildItems();
         items.forEach((key, value) -> event.getInventory().setItem(key, value));
