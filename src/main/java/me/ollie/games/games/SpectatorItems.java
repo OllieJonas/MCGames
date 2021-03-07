@@ -12,31 +12,47 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class SpectatorItems implements Listener {
 
-    public static final ItemStack SPECTATE_ITEM = new ItemStackBuilder(Material.ENCHANTED_BOOK).withName("&bSpectate Others (Right Click)").withLore("&7Right click to spectate other players!").build();
+    public static final ItemStack SPECTATE_ITEM = new ItemStackBuilder(Material.PLAYER_HEAD).withName("&bSpectate Others (Right Click)").withLore("&7Right click to spectate other players!").build();
 
     public static void give(Player player) {
-        player.sendMessage("given items");
-        player.getInventory().clear();
         player.getInventory().setItem(0, SPECTATE_ITEM);
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        MessageUtil.broadcast("event called");
-        if (event.getItem() == null)
-            return;
-
-        MessageUtil.broadcast("item not null");
+    public void onPlayerMove(PlayerMoveEvent event) {
 
         LobbyManager lobbyManager = LobbyManager.getInstance();
         Player player = event.getPlayer();
 
         if (!lobbyManager.isInGame(player)) {
-            MessageUtil.broadcast("not in game");
+            return;
+        }
+
+        AbstractGame game = lobbyManager.getLobbyFor(player).getGame();
+        SurvivalGames survivalGames = (SurvivalGames) game;
+
+        if (!survivalGames.isSpectator(player))
+            return;
+
+        if (!event.getPlayer().getInventory().contains(Material.BOOK)) {
+            give(player);
+        }
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        if (event.getItem() == null)
+            return;
+
+        LobbyManager lobbyManager = LobbyManager.getInstance();
+        Player player = event.getPlayer();
+
+        if (!lobbyManager.isInGame(player)) {
             return;
         }
 
@@ -44,7 +60,6 @@ public class SpectatorItems implements Listener {
 
 
         if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).contains("Spectate Others")) {
-            MessageUtil.broadcast("opening menu");
             GUIManager.getInstance().openGuiFor(player, spectateGUI((SurvivalGames) lobbyManager.getLobbyFor(player).getGame()).getGui());
         }
     }

@@ -10,8 +10,12 @@ public class EnchantmentToName {
         switch (enchantment.getName()) {
             case "DAMAGE_ALL":
                 return "Sharpness";
+            case "DURABILITY":
+                return "Unbreaking";
+            case "PROTECTION_ENVIRONMENTAL":
+                return "Protection";
             default:
-                throw new IllegalArgumentException("not found here rip :(");
+                return "Unknown";
         }
     }
 }

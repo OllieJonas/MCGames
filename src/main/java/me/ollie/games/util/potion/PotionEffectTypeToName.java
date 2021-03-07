@@ -25,6 +25,8 @@ public class PotionEffectTypeToName {
                 return "Damage";
             case "HEAL":
                 return "Healing";
+            case "INCREASE_DAMAGE":
+                return "Strength";
             case "INVISIBILITY":
                 return "Invisibility";
             case "JUMP":
@@ -37,7 +39,7 @@ public class PotionEffectTypeToName {
                 return "Wither";
             case "SLOW_FALLING":
                 return "Feather Falling";
-            case "SLOWNESS":
+            case "SLOW":
                 return "Slowness";
             case "SPEED":
                 return "Speed";

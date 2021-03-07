@@ -26,7 +26,7 @@ public class SGChest {
 
         WeightedRandomSet<ChestItem> possibleItems = ChestItemRepository.getItems();
 
-        int size = RANDOM.nextInt(3) + 3;
+        int size = RANDOM.nextInt(2     ) + 2;
         for (int i = 0; i < size; i++) {
             items.add(possibleItems.getRandom().getItem());
         }

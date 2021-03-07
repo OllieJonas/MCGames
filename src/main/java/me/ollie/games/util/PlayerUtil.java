@@ -3,6 +3,7 @@ package me.ollie.games.util;
 import lombok.experimental.UtilityClass;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 @UtilityClass
 public class PlayerUtil {
@@ -15,5 +16,9 @@ public class PlayerUtil {
         player.setInvisible(false);
         player.setHealth(20D);
         player.setFireTicks(0);
+        player.setExp(0);
+        player.setTotalExperience(0);
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        player.setLevel(0);
     }
 }

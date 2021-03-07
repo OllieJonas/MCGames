@@ -17,6 +17,8 @@ public class ChestItemRepository {
 
     static {
         // Weapons
+
+        items.add(new ChestItem(new ItemStackBuilder(Material.COMPASS).withName(ChatColor.AQUA + "Player Tracker").build()), 0.3F);
         items.add(new ChestItem(new ItemStack(Material.WOODEN_SWORD)), 0.3F);
         items.add(new ChestItem(new ItemStack(Material.STONE_SWORD)), 0.15F);
         items.add(new ChestItem(new ItemStack(Material.WOODEN_AXE)), 0.35F);
@@ -30,25 +32,20 @@ public class ChestItemRepository {
         items.add(new ChestItem(new ItemStack(Material.LEATHER_BOOTS)), 0.4F);
         items.add(new ChestItem(new ItemStackBuilder(Material.LEATHER_BOOTS).withEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build()), 0.3F);
 
-        items.add(new ChestItem(new ItemStack(Material.CHAINMAIL_HELMET)), 0.3F);
-        items.add(new ChestItem(new ItemStack(Material.CHAINMAIL_CHESTPLATE)), 0.3F);
-        items.add(new ChestItem(new ItemStack(Material.CHAINMAIL_LEGGINGS)), 0.3F);
-        items.add(new ChestItem(new ItemStack(Material.CHAINMAIL_BOOTS)), 0.3F);
+        items.add(new ChestItem(new ItemStack(Material.CHAINMAIL_HELMET)), 0.1F);
+        items.add(new ChestItem(new ItemStack(Material.CHAINMAIL_CHESTPLATE)), 0.1F);
+        items.add(new ChestItem(new ItemStack(Material.CHAINMAIL_LEGGINGS)), 0.1F);
+        items.add(new ChestItem(new ItemStack(Material.CHAINMAIL_BOOTS)), 0.1F);
 
-        items.add(new ChestItem(new ItemStack(Material.GOLDEN_HELMET)), 0.3F);
-        items.add(new ChestItem(new ItemStack(Material.GOLDEN_CHESTPLATE)), 0.3F);
-        items.add(new ChestItem(new ItemStack(Material.GOLDEN_LEGGINGS)), 0.3F);
-        items.add(new ChestItem(new ItemStack(Material.GOLDEN_BOOTS)), 0.3F);
+        items.add(new ChestItem(new ItemStack(Material.GOLDEN_HELMET)), 0.1F);
+        items.add(new ChestItem(new ItemStack(Material.GOLDEN_CHESTPLATE)), 0.1F);
+        items.add(new ChestItem(new ItemStack(Material.GOLDEN_LEGGINGS)), 0.1F);
+        items.add(new ChestItem(new ItemStack(Material.GOLDEN_BOOTS)), 0.1F);
 
-        items.add(new ChestItem(new ItemStack(Material.IRON_HELMET)), 0.1F);
-        items.add(new ChestItem(new ItemStack(Material.IRON_CHESTPLATE)), 0.1F);
-        items.add(new ChestItem(new ItemStack(Material.IRON_LEGGINGS)), 0.1F);
-        items.add(new ChestItem(new ItemStack(Material.IRON_BOOTS)), 0.1F);
-
-        // Useless garbage
-        items.add(new ChestItem(new ItemStack(Material.PORKCHOP)), 0.4F);
-        items.add(new ChestItem(new ItemStack(Material.APPLE)), 0.4F);
-        items.add(new ChestItem(new ItemStack(Material.BEEF)), 0.4F);
+        items.add(new ChestItem(new ItemStack(Material.IRON_HELMET)), 0.05F);
+        items.add(new ChestItem(new ItemStack(Material.IRON_CHESTPLATE)), 0.05F);
+        items.add(new ChestItem(new ItemStack(Material.IRON_LEGGINGS)), 0.05F);
+        items.add(new ChestItem(new ItemStack(Material.IRON_BOOTS)), 0.05F);
 
         // Materials
         items.add(new ChestItem(new ItemStack(Material.STICK)), 0.3F);
@@ -58,10 +55,10 @@ public class ChestItemRepository {
         items.add(new ChestItem(new ItemStack(Material.EXPERIENCE_BOTTLE), true), 0.2F);
 
         // Random stuff that's useful in battle
-        items.add(new ChestItem(new ItemStack(Material.SNOWBALL), true), 0.2F);
-        items.add(new ChestItem(new ItemStack(Material.FISHING_ROD)), 0.3F);
+        items.add(new ChestItem(new ItemStack(Material.SNOWBALL), true), 0.1F);
+        items.add(new ChestItem(new ItemStack(Material.FISHING_ROD)), 0.1F);
         items.add(new ChestItem(new ItemStack(Material.SHIELD)), 0.1F);
-        items.add(new ChestItem(new ItemStack(Material.BOW)), 0.2F);
+        items.add(new ChestItem(new ItemStack(Material.BOW)), 0.1F);
         items.add(new ChestItem(new ItemStack(Material.LAPIS_LAZULI), true), 0.3F);
         items.add(new ChestItem(new ItemStack(Material.ENDER_PEARL), true), 0.1F);
 

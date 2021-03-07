@@ -46,7 +46,6 @@ public class GUIManager {
 
     public void notifyAllObservers(GUI gui) {
         observers.get(gui.getName()).forEach(player -> {
-            player.sendMessage("notified");
             gui.redraw();
         });
     }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.Getter;
 import me.ollie.games.gui.GUI;
 import me.ollie.games.gui.GUIItem;
+import me.ollie.games.util.ChestGUIUtils;
 import me.ollie.games.util.EnchantmentToName;
 import me.ollie.games.util.ItemStackBuilder;
 import me.ollie.games.util.RomanNumberUtil;
@@ -67,7 +68,7 @@ public class KitGUI {
     }
 
     public void initGui() {
-        this.gui = new GUI("Kit Selector - Press ESC to Exit!", 54) {
+        this.gui = new GUI("Kit Selector - Press ESC to Exit!", ChestGUIUtils.calculateInventorySize(KitRegistry.getKits().size())) {
             @Override
             public void addItems() {
                 AtomicInteger counter = new AtomicInteger(0);

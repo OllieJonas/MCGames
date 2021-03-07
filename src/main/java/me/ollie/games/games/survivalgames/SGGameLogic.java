@@ -11,6 +11,8 @@ import me.ollie.games.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -135,8 +137,9 @@ public class SGGameLogic {
             });
 
             LobbyManager.getInstance().removeLobby(LobbyManager.getInstance().getLobbyIdFor(winner));
-        }, 10 * 20L);
+        }, 10 * 40L);
 
+        survivalGames.getMap().getWorld().getEntities().stream().filter(f -> f.getType() == EntityType.WOLF || f.getType() == EntityType.HORSE).forEach(Entity::remove);
         Leaderboard.getInstance().addScores(survivalGames.getPlayerKills(), winner);
         survivalGames.getCurrentCountdown().destroy();
         return winner;

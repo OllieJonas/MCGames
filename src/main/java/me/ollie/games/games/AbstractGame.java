@@ -11,7 +11,6 @@ import java.util.Set;
 @Getter
 public abstract class AbstractGame {
 
-
     protected final Set<Player> spectators;
 
     protected final String name;

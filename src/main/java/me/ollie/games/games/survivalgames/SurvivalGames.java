@@ -140,7 +140,7 @@ public class SurvivalGames extends AbstractGame {
         player.showTitle(Title.title(Component.text(ChatColor.RED + "You died! :("), Component.text(ChatColor.GRAY + "You can spectate others by right clicking the clock")));
         player.setAllowFlight(true);
         player.setGameMode(GameMode.CREATIVE);
-        player.setInvisible(true);
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60 * 60 * 20, 1));
         spectators.add(player);
         SpectatorItems.give(player);
     }

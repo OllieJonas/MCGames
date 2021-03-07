@@ -12,7 +12,7 @@ import java.util.Collection;
 public class KitsCommand extends SubCommand {
 
     public KitsCommand() {
-        super("kits", true, NO_ALIASES);
+        super("kits", false, NO_ALIASES);
     }
 
     @Override

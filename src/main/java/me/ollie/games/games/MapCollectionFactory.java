@@ -25,6 +25,8 @@ public class MapCollectionFactory {
         World breezeIsland = Bukkit.getWorld("sg_breeze_island_2");
         World vareide = Bukkit.getWorld("sg_vareide");
         World drybonyValley = Bukkit.getWorld("sg_drybony_valley");
+        World seschellah = Bukkit.getWorld("sg_seschellah");
+        World cambodia = Bukkit.getWorld("sg_cambodia");
 
         sgMaps.add(new SGMap("Turbulence", turbulence, Lists.newArrayList(
                 new Location(turbulence, 1078.5, 53.5, -46.5, 170, 0),
@@ -132,6 +134,60 @@ public class MapCollectionFactory {
                 new Location(drybonyValley, -1193.5 , 18.5 , 314.5 , 31 , 0),
                 new Location(drybonyValley, -1198.5 , 18.5 , 312.5 , 14 , 0),
                 new Location(drybonyValley, -1203.5 , 18.5 , 311.5 , 0 , 0)
+        )));
+
+        sgMaps.add(new SGMap("Seschellah", seschellah, Lists.newArrayList(
+                new Location(seschellah, -239.5 , 207.5 , -213.5 , 179 , 0),
+        new Location(seschellah, -236.5 , 207.5 , -214.5 , 163 , 0),
+        new Location(seschellah, -233.5 , 207.5 , -215.5 , 149 , 0),
+        new Location(seschellah, -230.5 , 207.5 , -217.5 , 136 , 0),
+        new Location(seschellah, -228.5 , 207.5 , -220.5 , 119 , 0),
+        new Location(seschellah, -227.5 , 207.5 , -223.5 , 104 , 0),
+        new Location(seschellah, -226.5 , 207.5 , -226.5 , 91 , 0),
+        new Location(seschellah, -227.5 , 207.5 , -229.5 , 76 , 0),
+        new Location(seschellah, -228.5 , 207.5 , -232.5 , 61 , 0),
+        new Location(seschellah, -230.5 , 207.5 , -235.5 , 46 , 0),
+        new Location(seschellah, -233.5 , 207.5 , -237.5 , 29 , 0),
+        new Location(seschellah, -236.5 , 207.5 , -238.5 , 15 , 0),
+        new Location(seschellah, -239.5 , 207.5 , -239.5 , 0 , 0),
+        new Location(seschellah, -242.5 , 207.5 , -238.5 , -16 , 0),
+        new Location(seschellah, -245.5 , 207.5 , -237.5 , -28 , 0),
+        new Location(seschellah, -248.5 , 207.5 , -235.5 , -45 , 0),
+        new Location(seschellah, -250.5 , 207.5 , -232.5 , -65 , 0),
+        new Location(seschellah, -251.5 , 207.5 , -229.5 , -78 , 0),
+        new Location(seschellah, -252.5 , 207.5 , -226.5 , -92 , 0),
+        new Location(seschellah, -251.5 , 207.5 , -223.5 , -107 , 0),
+        new Location(seschellah, -250.5 , 207.5 , -220.5 , -120 , 0),
+        new Location(seschellah, -248.5 , 207.5 , -217.5 , -135 ,0),
+        new Location(seschellah, -245.5 , 207.5 , -215.5 , -148 , 0),
+        new Location(seschellah, -242.5 , 207.5 , -214.5 , -163, 0)
+        )));
+
+        sgMaps.add(new SGMap("Cambodia", cambodia, Lists.newArrayList(
+                new Location(cambodia, 430.5 , 7.5 , -606.5 , 0 , 0),
+                new Location(cambodia, 426.5 , 7.5 , -606.5 , 15 , 0),
+                new Location(cambodia, 422.5 , 7.5 , -604.5 , -30 , 0),
+                new Location(cambodia, 419.5 , 7.5 , -602.5  , -45 , 0),
+                new Location(cambodia, 417.5 , 7.5 , -599.5 , -60 , 0),
+                new Location(cambodia, 415.5 , 7.5 , -595.5 , -75 , 0),
+                new Location(cambodia, 415.5 , 7.5 , -591.5 , -90 , 0),
+                new Location(cambodia, 415.5 , 7.5 , -587.5 , -105 , 0),
+                new Location(cambodia, 417.5 , 7.5 , -583.5 , -120 , 0),
+                new Location(cambodia, 419.5 , 7.5 , -580.5 , -135 , 0),
+                new Location(cambodia, 422.5 , 7.5 , -578.5 , -150 , 0),
+                new Location(cambodia, 426.5 , 7.5 , -576.5 , -165 , 0),
+                new Location(cambodia, 430.5 , 7.5 , -576.5 , 180 , 0),
+                new Location(cambodia, 434.5 , 7.5 , -576.5 , 165 , 0),
+                new Location(cambodia, 438.5 , 7.5 , -578.5 , 150 , 0),
+                new Location(cambodia, 441.5 , 7.5 , -580.5 , 135 , 0),
+                new Location(cambodia, 443.5 , 7.5 , -583.5 , 120 , 0),
+                new Location(cambodia, 445.5 , 7.5 , -587.5 , 105 , 0),
+                new Location(cambodia, 445.5 , 7.5 , -591.5 , 90 , 0),
+                new Location(cambodia, 445.5 , 7.5 , -595.5 , 75 , 0),
+                new Location(cambodia, 443.5 , 7.5 , -599.5 , 60 , 0),
+                new Location(cambodia, 441.5 , 7.5 , -602.5 , 45 , 0),
+                new Location(cambodia, 438.5 , 7.5 , -604.5 , 30 , 0),
+                new Location(cambodia, 434.5 , 7.5 , -606.5 , 15 , 0)
         )));
     }
 

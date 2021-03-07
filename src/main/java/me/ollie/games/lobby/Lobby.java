@@ -57,7 +57,7 @@ public class Lobby {
 
     public void addPlayer(Player player) {
         players.add(player);
-        hidePlayers(player);
+        // hidePlayers(player);
 
         player.teleport(spawnPoint);
         countdown.addPlayer(player);
@@ -73,7 +73,7 @@ public class Lobby {
 
     public void removePlayer(Player player) {
         players.remove(player);
-        showPlayers(player); // show all players in hub
+        // showPlayers(player); // show all players in hub
 
         PlayerUtil.reset(player);
 

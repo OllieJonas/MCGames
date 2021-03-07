@@ -42,7 +42,7 @@ public class Leaderboard {
         this.plugin = plugin;
         this.scores = new LinkedHashMap<>();
         this.hologramLeft = new LeaderboardHologram(plugin, LEADERBOARD_LOCATION_LEFT.get());
-        this.hologramRight = new LeaderboardHologram(plugin, LEADERBOARD_LOCATION_RIGHT.get());
+        // this.hologramRight = new LeaderboardHologram(plugin, LEADERBOARD_LOCATION_RIGHT.get());
 
         init();
         instance = this;
@@ -51,7 +51,7 @@ public class Leaderboard {
     public void init() {
         Bukkit.getOnlinePlayers().forEach(p -> scores.put(p.getName(), 0));
         hologramLeft.draw(getLeaderboard(scores));
-        hologramRight.draw(getLeaderboard(scores));
+        // hologramRight.draw(getLeaderboard(scores));
     }
 
     public void registerPlayer(Player player) {
@@ -80,7 +80,7 @@ public class Leaderboard {
     public void redraw() {
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
             hologramLeft.redraw(getLeaderboard(scores));
-            hologramRight.redraw(getLeaderboard(scores));
+            // hologramRight.redraw(getLeaderboard(scores));
         }, 20L);
 
     }
